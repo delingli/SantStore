@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v4.widget.DrawerLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/activity_main_store"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true">
+
+    <android.support.design.widget.CoordinatorLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/appbar_layout_height">
+
+            <android.support.v7.widget.Toolbar
+                android:id="@+id/main_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
+                android:minHeight="@dimen/appbar_layout_height"
+                app:contentInsetLeft="0dp"
+                app:contentInsetStart="0dp">
+
+                <TextView
+                    android:id="@+id/more_title"
+                    style="@style/BarText"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:maxLines="1"
+                    android:text="@string/app_name" />
+
+                <ImageView
+                    android:id="@+id/goto_dm"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right|center_vertical"
+                    android:layout_marginRight="8dp"
+                    android:padding="12dp"
+                    android:src="@drawable/dm" />
+
+            </android.support.v7.widget.Toolbar>
+
+        </android.support.design.widget.AppBarLayout>
+
+        <FrameLayout
+            android:id="@+id/layout_loadAndError"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <ProgressBar
+                android:id="@+id/progress"
+                style="@style/Progress_circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:id="@+id/error_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/page_iv"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_error_page" />
+
+                <Button
+                    android:id="@+id/btn_reload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_below="@id/page_iv"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/error_btn_bg"
+                    android:ellipsize="end"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/load_error"
+                    android:textColor="#ff717171"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+        </FrameLayout>
+
+        <com.hai.store.view.RecommendADListView
+            android:id="@+id/banner_app"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="80dp">
+
+        </com.hai.store.view.RecommendADListView>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/main_list"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="320dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+    </android.support.design.widget.CoordinatorLayout>
+</android.support.v4.widget.DrawerLayout>

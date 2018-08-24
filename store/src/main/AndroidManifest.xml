@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.hai.store">
+
+    <application>
+        <activity
+            android:name=".MainStoreActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.MoreListActivity"
+            android:launchMode="singleTask"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data
+                    android:host="store"
+                    android:scheme="com.hai.store" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activity.DetailActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".activity.DMActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".notify.NotifyActivity"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/Theme" />
+        <activity
+            android:name=".view.WifiADActivity"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/DialogStyle" />
+        <activity
+            android:name=".view.WifiOneADActivity"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/DialogStyle" />
+        <activity
+            android:name=".view.WifiTipsActivity"
+            android:excludeFromRecents="true"
+            android:launchMode="singleTask"
+            android:noHistory="true"
+            android:screenOrientation="portrait"
+            android:theme="@style/DialogStyle" />
+        <activity
+            android:name=".activity.SearchActivity"
+            android:screenOrientation="portrait"
+            android:theme="@style/search_style" />
+
+        <service
+            android:name=".notify.NotifyAppServer"
+            android:exported="true" />
+        <service
+            android:name=".keepalive.GrayService"
+            android:enabled="true"
+            android:exported="true" />
+        <service android:name=".keepalive.GrayService$GrayInnerService" />
+        <service
+            android:name=".keepalive.jss.JobSchedulerService"
+            android:enabled="true"
+            android:permission="android.permission.BIND_JOB_SERVICE"
+            android:process=":push" />
+        <service android:name=".keepalive.jss.PulseService" />
+
+        <receiver android:name=".broadcast.ApkReceiver">
+            <intent-filter>
+
+                <!-- 一个新应用包已经安装在设备上，数据包括包名（监听所在的app，新安装时，不能接收到这个广播） -->
+                <action android:name="android.intent.action.PACKAGE_ADDED" />
+                <!-- 一个新版本的应用安装到设备，替换之前已经存在的版本  替换时会先收到卸载的再收到替换的， 替换自身也能收到 -->
+                <action android:name="android.intent.action.PACKAGE_REPLACED" />
+                <!-- 一个已存在的应用程序包已经从设备上移除，包括包名（卸载监听所在的app，则无法接收到） -->
+                <action android:name="android.intent.action.PACKAGE_REMOVED" />
+
+                <data android:scheme="package" />
+            </intent-filter>
+        </receiver>
+        <receiver android:name=".broadcast.WifiReceiver">
+            <intent-filter>
+                <action android:name="android.net.wifi.WIFI_STATE_CHANGED" />
+            </intent-filter>
+        </receiver>
+
+        <activity android:name=".activity.TestActivity"></activity>
+    </application>
+
+</manifest>

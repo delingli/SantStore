@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@drawable/bg_dialog_wifi_ad"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/wifi_tips" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:gravity="center"
+            android:text="Wi-Fi已成功连接，赶快去下载软件、游戏吧!"
+            android:textColor="#333333"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="22dp"
+            android:gravity="center"
+            android:text="50万款游戏，70万首音乐，上百万视频，欢乐下不停"
+            android:textColor="#333333"
+            android:textSize="12sp" />
+
+        <TextView
+            android:id="@+id/wifi_tips_store"
+            android:layout_width="120dp"
+            android:layout_height="36dp"
+            android:layout_gravity="center_horizontal"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="12dp"
+            android:background="@drawable/tv_bg_down"
+            android:gravity="center"
+            android:text="去市场逛逛"
+            android:textColor="#FFF"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <ImageView
+        android:id="@+id/wifi_tips_close"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentRight="true"
+        android:layout_marginRight="8dp"
+        android:layout_marginTop="4dp"
+        android:src="@drawable/close" />
+</RelativeLayout>

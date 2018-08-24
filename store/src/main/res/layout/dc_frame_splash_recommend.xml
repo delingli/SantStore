@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="#FFF">
+
+    <RelativeLayout
+        android:id="@+id/first_re"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <ImageView
+            android:id="@+id/splash_close"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:src="@drawable/go_back_pressed" />
+
+        <TextView
+            android:id="@+id/splash_un_all_check"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:layout_centerVertical="true"
+            android:layout_marginRight="8dp"
+            android:padding="4dp"
+            android:text="取消全选"
+            android:textColor="#127ae7"
+            android:textSize="16sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/two_ll"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/first_re"
+        android:layout_marginLeft="16dp"
+        android:layout_marginRight="16dp"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="刚换新手机？"
+            android:textColor="#000"
+            android:textSize="20sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="你可能需要安装以下应用"
+            android:textColor="#666"
+            android:textSize="16sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="0.5dp"
+            android:layout_marginTop="10dp"
+            android:background="#d6d6d6" />
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/splash_recycle"
+            android:layout_width="match_parent"
+            android:layout_height="320dp"
+            android:layout_marginTop="10dp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@id/two_ll"
+        android:gravity="center_horizontal"
+        android:orientation="vertical">
+
+        <TextView
+            android:id="@+id/splash_change"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:gravity="center"
+            android:paddingBottom="8dp"
+            android:paddingTop="4dp"
+            android:text="换一批"
+            android:textColor="#06a84a"
+            android:textSize="16sp" />
+
+        <Button
+            android:id="@+id/splash_install"
+            android:layout_width="240dp"
+            android:layout_height="40dp"
+            android:layout_marginBottom="16dp"
+            android:background="@drawable/tv_bg_down"
+            android:text="一键安装"
+            android:textColor="#fff"
+            android:textSize="16sp" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="10dp"
+            android:text="正在使用WLAN网络，可以放心下载"
+            android:textColor="#333"
+            android:textSize="12sp" />
+    </LinearLayout>
+</RelativeLayout>

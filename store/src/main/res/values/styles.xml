@@ -1,0 +1,100 @@
+<resources>
+
+    <style name="Theme" parent="@android:style/Theme.Translucent.NoTitleBar.Fullscreen">
+    </style>
+
+    <style name="NoSpaceActionBarTheme" parent="Base.Widget.AppCompat.Toolbar">
+        <item name="contentInsetStart">0dp</item>
+        <item name="contentInsetStartWithNavigation">0dp</item>
+    </style>
+
+    <style name="BarText">
+        <item name="android:textColor">#FFF</item>
+        <item name="android:textSize">18sp</item>
+    </style>
+
+    <style name="MiniText">
+        <item name="android:textColor">#FFF</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="BlackMiniText">
+        <item name="android:textColor">#cc000000</item>
+        <item name="android:textSize">12sp</item>
+    </style>
+
+    <style name="LightMediumText">
+        <item name="android:textColor">#666666</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+    <style name="BlackMediumText">
+        <item name="android:textColor">#cc000000</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+
+
+    <style name="BlackBigText">
+        <item name="android:textColor">#cc000000</item>
+        <item name="android:textSize">16sp</item>
+    </style>
+
+    <!--processButton-->
+    <declare-styleable name="ProcessButton">
+        <attr name="pb_textProgress" format="string" />
+        <attr name="pb_textComplete" format="string" />
+        <attr name="pb_textError" format="string" />
+        <attr name="pb_colorProgress" format="color" />
+        <attr name="pb_colorComplete" format="color" />
+        <attr name="pb_colorError" format="color" />
+    </declare-styleable>
+
+    <declare-styleable name="FlatButton">
+        <attr name="pb_colorPressed" format="color" />
+        <attr name="pb_colorNormal" format="color" />
+        <attr name="pb_cornerRadius" format="dimension" />
+    </declare-styleable>
+
+    <declare-styleable name="NumberProgressBar">
+        <attr name="progress_current" format="integer" />
+        <attr name="progress_max" format="integer" />
+        <attr name="progress_unreached_color" format="color" />
+        <attr name="progress_reached_color" format="color" />
+        <attr name="progress_reached_bar_height" format="dimension" />
+        <attr name="progress_unreached_bar_height" format="dimension" />
+        <attr name="progress_text_size" format="dimension" />
+        <attr name="progress_text_color" format="color" />
+        <attr name="progress_text_offset" format="dimension" />
+        <attr name="progress_text_visibility" format="enum">
+            <enum name="visible" value="0" />
+            <enum name="invisible" value="1" />
+        </attr>
+    </declare-styleable>
+
+    <style name="navigation">
+        <item name="android:layout_gravity">center_vertical</item>
+    </style>
+
+    <style name="Progress_circle" parent="@android:style/Widget.ProgressBar">
+        <item name="android:indeterminateDrawable">@drawable/refresh_progress</item>
+        <item name="android:minWidth">50dp</item>
+        <item name="android:minHeight">50dp</item>
+        <item name="android:maxWidth">60dp</item>
+        <item name="android:maxHeight">60dp</item>
+    </style>
+
+    <style name="DialogStyle" parent="@android:style/Theme.Holo.Dialog.NoActionBar">
+        <item name="android:windowBackground">@android:color/transparent</item>
+        <item name="android:windowCloseOnTouchOutside">false</item>
+    </style>
+
+    <style name="search_style" parent="Theme.AppCompat.Light.NoActionBar">
+        <item name="searchViewStyle">@style/MySearchViewStyle</item>
+    </style>
+
+    <style name="MySearchViewStyle" parent="Widget.AppCompat.SearchView">
+        <item name="searchHintIcon">@drawable/ic_search</item>
+        <item name="closeIcon">@drawable/search_close</item>
+        <item name="android:textSize">14sp</item>
+    </style>
+</resources>

@@ -1,0 +1,229 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent">
+
+    <ProgressBar
+        android:id="@+id/progress"
+        style="@style/Progress_circle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <RelativeLayout
+        android:id="@+id/error_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:visibility="gone">
+
+        <ImageView
+            android:id="@+id/page_iv"
+            android:layout_width="100dp"
+            android:layout_height="100dp"
+            android:layout_centerHorizontal="true"
+            android:scaleType="centerInside"
+            android:src="@drawable/ic_error_page" />
+
+        <Button
+            android:id="@+id/btn_reload"
+            android:layout_width="wrap_content"
+            android:layout_height="34dp"
+            android:layout_below="@id/page_iv"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="10dp"
+            android:background="@drawable/error_btn_bg"
+            android:ellipsize="end"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:text="@string/load_error"
+            android:textColor="#ff717171"
+            android:textSize="14sp" />
+    </RelativeLayout>
+
+    <LinearLayout
+        android:id="@+id/content_view"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingBottom="12dp"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="12dp">
+
+            <TextView
+                android:id="@+id/version_name"
+                style="@style/BlackMiniText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <TextView
+                android:id="@+id/star_count"
+                style="@style/BlackMiniText"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp" />
+
+            <RatingBar
+                android:id="@+id/rb_star"
+                style="?android:attr/ratingBarStyleSmall"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="16dp"
+                android:progressDrawable="@drawable/rating_progress"
+                android:visibility="gone" />
+
+        </LinearLayout>
+
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/detail_src_list"
+            android:layout_width="match_parent"
+            android:layout_height="240dp">
+
+        </android.support.v7.widget.RecyclerView>
+
+        <TextView
+            android:id="@+id/newFeature_title"
+            style="@style/BlackBigText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="12dp"
+            android:paddingLeft="16dp" />
+
+        <TextView
+            android:id="@+id/newFeature"
+            style="@style/BlackMiniText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:paddingLeft="24dp"
+            android:paddingRight="16dp" />
+
+        <TextView
+            android:id="@+id/description"
+            style="@style/BlackMiniText"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="16dp"
+            android:paddingRight="16dp"
+            android:paddingTop="12dp" />
+
+        <LinearLayout
+            android:id="@+id/more_detail"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="24dp"
+            android:orientation="vertical"
+            android:visibility="visible">
+
+            <TextView
+                style="@style/BlackBigText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingLeft="16dp"
+                android:text="@string/detail_info" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="12dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/LightMediumText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="@string/app_pkg_name" />
+
+                <TextView
+                    android:id="@+id/pkg_name"
+                    style="@style/BlackMediumText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_weight="8" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/update_time_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/LightMediumText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="@string/update_time" />
+
+                <TextView
+                    android:id="@+id/update_time"
+                    style="@style/BlackMediumText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_weight="8" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/rom_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/LightMediumText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="@string/support_rom" />
+
+                <TextView
+                    android:id="@+id/rom"
+                    style="@style/BlackMediumText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_weight="8" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/author_title"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="32dp"
+                android:layout_marginTop="8dp"
+                android:orientation="horizontal">
+
+                <TextView
+                    style="@style/LightMediumText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="3"
+                    android:gravity="right"
+                    android:text="@string/developer" />
+
+                <TextView
+                    android:id="@+id/author_name"
+                    style="@style/BlackMediumText"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="12dp"
+                    android:layout_weight="8" />
+            </LinearLayout>
+        </LinearLayout>
+    </LinearLayout>
+</FrameLayout>

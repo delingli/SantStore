@@ -1,0 +1,60 @@
+apply plugin: 'com.android.application'
+
+android {
+    compileSdkVersion 25
+    buildToolsVersion "25.0.3"
+
+    defaultConfig {
+        applicationId "com.sant.zhuoyi"
+        minSdkVersion 15
+        targetSdkVersion 22
+        versionCode 15
+        versionName "2.0.5"
+    }
+
+    signingConfigs {
+        test {
+            storeFile file("zhuoyi.jks")
+            keyAlias "zhuoyi"
+            keyPassword "123456"
+            storePassword "123456"
+        }
+    }
+
+    buildTypes {
+
+        debug {
+            signingConfig signingConfigs.test
+        }
+
+        release {
+            minifyEnabled true
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    productFlavors {
+        AA506 {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "AA506"]
+        }
+        AA512 {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "AA512"]
+        }
+        AY030 {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "AY030"]
+        }
+        AY031 {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "AY031"]
+        }
+        AY032 {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "AY032"]
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(include: ['*.jar'], dir: 'libs')
+    compile 'com.android.support:appcompat-v7:25.3.1'
+
+    compile project(':store')
+}

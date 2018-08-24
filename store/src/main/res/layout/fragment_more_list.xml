@@ -1,0 +1,126 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/activity_more_list"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:fitsSystemWindows="true"
+    android:orientation="vertical">
+
+    <android.support.v7.widget.Toolbar
+        android:id="@+id/more_toolbar"
+        style="@style/NoSpaceActionBarTheme"
+        android:layout_width="match_parent"
+        android:background="?attr/colorPrimary"
+        android:layout_height="64dp"
+        android:focusable="true"
+        android:focusableInTouchMode="true"
+        android:minHeight="@dimen/appbar_layout_height"
+        app:contentInsetLeft="0dp"
+        app:contentInsetStart="0dp"
+        app:paddingStart="0dp">
+
+        <RelativeLayout
+            android:id="@+id/search_home"
+            android:layout_width="240dp"
+            android:layout_height="32dp"
+            android:layout_marginLeft="30dp"
+            android:layout_marginStart="30dp"
+            android:background="@drawable/tv_bg_one_key_install"
+            tools:ignore="RtlCompat">
+
+            <ImageView
+                android:layout_width="20dp"
+                android:layout_height="20dp"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="6dp"
+                android:src="@drawable/ic_search" />
+
+            <TextView
+                android:id="@+id/more_title"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerVertical="true"
+                android:layout_marginLeft="32dp"
+                android:maxLines="1"
+                android:textColor="#8A8A8A"
+                android:textSize="16sp" />
+        </RelativeLayout>
+
+        <ImageView
+            android:id="@+id/goto_dm"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="end|center_vertical"
+            android:layout_marginRight="8dp"
+            android:padding="12dp"
+            android:src="@drawable/dm" />
+
+    </android.support.v7.widget.Toolbar>
+
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <FrameLayout
+            android:id="@+id/layout_loadAndError"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <ProgressBar
+                android:id="@+id/progress"
+                style="@style/Progress_circle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:visibility="gone" />
+
+            <RelativeLayout
+                android:id="@+id/error_view"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:gravity="center"
+                android:visibility="gone">
+
+                <ImageView
+                    android:id="@+id/page_iv"
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:layout_centerHorizontal="true"
+                    android:scaleType="centerInside"
+                    android:src="@drawable/ic_error_page" />
+
+                <Button
+                    android:id="@+id/btn_reload"
+                    android:layout_width="wrap_content"
+                    android:layout_height="34dp"
+                    android:layout_below="@id/page_iv"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:background="@drawable/error_btn_bg"
+                    android:ellipsize="end"
+                    android:paddingLeft="10dp"
+                    android:paddingRight="10dp"
+                    android:text="@string/load_error"
+                    android:textColor="#ff717171"
+                    android:textSize="14sp" />
+            </RelativeLayout>
+        </FrameLayout>
+
+        <android.support.v4.widget.SwipeRefreshLayout
+            android:id="@+id/more_swipe"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/more_list"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+            </android.support.v7.widget.RecyclerView>
+        </android.support.v4.widget.SwipeRefreshLayout>
+    </FrameLayout>
+</LinearLayout>

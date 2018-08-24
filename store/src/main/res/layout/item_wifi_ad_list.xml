@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/wifi_ad_app_ll"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_marginLeft="8dp"
+    android:layout_marginRight="8dp"
+    android:orientation="vertical">
+
+    <RelativeLayout
+        android:layout_width="58dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal">
+
+        <ImageView
+            android:id="@+id/wifi_ad_icon"
+            android:layout_width="48dp"
+            android:layout_height="48dp"
+            android:layout_centerHorizontal="true"
+            android:layout_marginTop="4dp" />
+
+        <ImageView
+            android:id="@+id/wifi_ad_gou"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_alignParentRight="true"
+            android:src="@drawable/gou" />
+    </RelativeLayout>
+
+    <TextView
+        android:id="@+id/wifi_ad_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center_horizontal"
+        android:layout_marginTop="12dp"
+        android:ellipsize="end"
+        android:maxLength="6"
+        android:maxLines="1"
+        android:textColor="#333333"
+        android:textSize="12sp" />
+</LinearLayout>
