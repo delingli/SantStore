@@ -175,7 +175,7 @@ public class MoreListActivity extends BaseActivity implements DownloadLogic.Down
     @Override
     public void loadData() {
         showLoading();
-        MoreListLogic.getAppList(MoreListActivity.this, null, SConstant.CID_APP_LIST,new StringCallback() {
+        MoreListLogic.getAppList(MoreListActivity.this, null, new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
                 if (handleData(response.body())) {
@@ -209,7 +209,7 @@ public class MoreListActivity extends BaseActivity implements DownloadLogic.Down
                 int lastVisibleItem = ((LinearLayoutManager) view.getLayoutManager()).findLastVisibleItemPosition();
                 if (!mLoading && visibleItemCount > 0 && state == SCROLL_STATE_IDLE && lastVisibleItem >= totalItemCount - 1) {
                     mLoading = true;
-                    MoreListLogic.getAppList(MoreListActivity.this, listInfo.href_next,SConstant.CID_APP_LIST, new StringCallback() {
+                    MoreListLogic.getAppList(MoreListActivity.this, listInfo.href_next, new StringCallback() {
                         @Override
                         public void onSuccess(Response<String> response) {
                             if (handleData(response.body())) {
@@ -281,7 +281,7 @@ public class MoreListActivity extends BaseActivity implements DownloadLogic.Down
     }
 
     private void refresh() {
-        MoreListLogic.getAppList(MoreListActivity.this, listInfo.href_next,SConstant.CID_APP_LIST, new StringCallback() {
+        MoreListLogic.getAppList(MoreListActivity.this, listInfo.href_next, new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
                 if (handleData(response.body())) {

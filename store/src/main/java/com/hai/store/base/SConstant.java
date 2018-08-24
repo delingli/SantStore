@@ -39,8 +39,6 @@ public interface SConstant {
 
     int CID_APP_LIST = -1; // 应用列表
     int CID_HOT = -2; //热门应用
-    int CID_HOT_SEARCH_RECOMMEND = -11; //热门搜索应用
-
     int CID_WIFI = -4; //wifi ad
     String TMODE = "&tmode=";
 

@@ -20,8 +20,8 @@ public class SearchLogic {
         request(url, SEARCH_TAG, callback);
     }
 
-    public static void getHotSearch(int cid,StringCallback callback) {
-        String url = SConstant.MARKET + SConstant.TYPE + SConstant.TYPE_LIST + SConstant.CID + cid;
+    public static void getHotSearch(StringCallback callback) {
+        String url = SConstant.MARKET + SConstant.TYPE + SConstant.TYPE_LIST + SConstant.CID + "-11";
         request(url, "hot", callback);
     }
 

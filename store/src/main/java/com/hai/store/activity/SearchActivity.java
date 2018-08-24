@@ -229,7 +229,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
         recyclerView.setVisibility(View.GONE);
         showContent();
         if (null == hotList) {
-            SearchLogic.getHotSearch(SConstant.CID_HOT_SEARCH_RECOMMEND,new StringCallback() {
+            SearchLogic.getHotSearch(new StringCallback() {
                 @Override
                 public void onSuccess(Response<String> response) {
                     if (finish) return;
