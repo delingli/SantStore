@@ -16,17 +16,17 @@ public class SearchLogic {
     private static final String RECOMMEDN_TAG = "recommend_search";
 
     public static void getSearchContent(String search, StringCallback callback) {
-        String url = SConstant.MARKET + SConstant.TYPE + SConstant.TYPE_SEARCH + SConstant.SEARCH + search;
+        String url = SConstant.MARKET + SConstant.TYPE + SConstant.TYPE_SEARCH + SConstant.SEARCH + search+SConstant.CID+"-29";
         request(url, SEARCH_TAG, callback);
     }
 
     public static void getHotSearch(StringCallback callback) {
-        String url = SConstant.MARKET + SConstant.TYPE + SConstant.TYPE_LIST + SConstant.CID + "-11";
+        String url = SConstant.MARKET + SConstant.TYPE + SConstant.TYPE_LIST + SConstant.CID + "-30";
         request(url, "hot", callback);
     }
 
     public static void getRecommend(StringCallback callback) {
-        String url = SConstant.MARKET + SConstant.TYPE + SConstant.TYPE_LIST + SConstant.CID + "-13" + SConstant.PAGE + 5;
+        String url = SConstant.MARKET + SConstant.TYPE + SConstant.TYPE_LIST + SConstant.CID + "-30" + SConstant.PAGE + 5;
         request(url, RECOMMEDN_TAG, callback);
     }
 
