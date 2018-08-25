@@ -40,6 +40,7 @@ import com.hai.store.data.DownloadCart;
 import com.hai.store.data.DownloadLogic;
 import com.hai.store.data.ReportLogic;
 import com.hai.store.data.SearchLogic;
+import com.hai.store.fragment.MoreListFragment;
 import com.hai.store.sqlite.PublicDao;
 import com.hai.store.utils.ApkUtils;
 import com.hai.store.utils.Utils;
@@ -48,6 +49,7 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -636,7 +638,8 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                         @Override
                         public void onClick(View view) {
                             StoreApkInfo tag = (StoreApkInfo) view.getTag();
-                            ApkUtils.install(mContext, DownloadLogic.buildUrl(mContext, tag.appname));
+                            ApkUtils.blueInstall(mContext, new File(DownloadLogic.buildUrl(mContext, tag.appname)), MoreListFragment.IA);
+//                            ApkUtils.install(mContext, DownloadLogic.buildUrl(mContext, tag.appname));
                         }
                     });
                     break;

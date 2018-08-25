@@ -1,12 +1,16 @@
 package com.hai.store.utils;
 
+import android.Manifest;
+import android.app.PackageInstallObserver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
+import android.content.pm.IPackageInstallObserver;
 import android.content.pm.PackageInfo;
 import android.content.pm.PackageManager;
 import android.graphics.drawable.Drawable;
 import android.net.Uri;
+import android.os.RemoteException;
 import android.util.Log;
 
 import com.hai.store.data.DownloadCart;
@@ -70,7 +74,7 @@ public class ApkUtils {
         try {
             Intent intent = context.getPackageManager().getLaunchIntentForPackage(packageName);
             context.startActivity(intent);
-        }catch (Exception e) {
+        } catch (Exception e) {
             Log.e("START_APP", "此app不支持打开");
         }
     }
@@ -125,13 +129,13 @@ public class ApkUtils {
         PackageInfo pkgInfo = pm.getPackageArchiveInfo(absPath, PackageManager.GET_ACTIVITIES);
         if (pkgInfo != null) {
 //            ApplicationInfo appInfo = pkgInfo.applicationInfo;
-        /* 必须加这两句，不然下面icon获取是default icon而不是应用包的icon */
+            /* 必须加这两句，不然下面icon获取是default icon而不是应用包的icon */
 //            appInfo.sourceDir = absPath;
 //            appInfo.publicSourceDir = absPath;
 //            String appName = pm.getApplicationLabel(appInfo).toString();// 得到应用名
 //            String packageName = appInfo.packageName; // 得到包名
             return pkgInfo.versionName; // 得到版本信息
-        /*两个其实是一样的 */
+            /*两个其实是一样的 */
 //            return pm.getApplicationIcon(appInfo);// 得到图标信息
 //            Drawable icon = appInfo.loadIcon(pm);
         }
@@ -214,6 +218,18 @@ public class ApkUtils {
         return false;
     }
 
+    public static void blueInstall(Context context, File file, int ia) {
+        if (file == null || !file.exists())
+            return;
+        if (hasPermission(context) && ia == 3) {//蓝蝴蝶
+            Log.d("ApkUtils","尝试静默安装");
+            directInstall(file, context);
+        } else {
+            normalInstall(file, context);
+            Log.d("ApkUtils","普通安装");
+        }
+    }
+
     public static List<String> scanAllInstallAppList(Context context) {
         List<String> appList = new ArrayList<>();
         PackageManager pm = context.getPackageManager();
@@ -222,5 +238,37 @@ public class ApkUtils {
             if (null != info) appList.add(info.packageName);
         }
         return appList;
+    }
+
+    public static boolean hasPermission(Context context) {
+        return PackageManager.PERMISSION_GRANTED == context.checkCallingOrSelfPermission(Manifest.permission.INSTALL_PACKAGES);
+    }
+
+    private static void directInstall(File files, Context context) {
+        PackageInstallObserver pio = new PackageInstallObserver(files);
+        PackageManager pm = context.getPackageManager();
+        pm.installPackage(Uri.fromFile(files), pio, PackageManager.INSTALL_REPLACE_EXISTING, null);
+    }
+
+    private static void normalInstall(File file, Context context) {
+        Intent intent = new Intent(Intent.ACTION_VIEW);
+        intent.setDataAndType(Uri.fromFile(file), "application/vnd.android.package-archive");
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+        context.startActivity(intent);
+    }
+
+
+    private static final class PackageInstallObserver extends IPackageInstallObserver.Stub {
+
+        private final File file;
+
+        PackageInstallObserver(File file) {
+            this.file = file;
+        }
+
+        @Override
+        public void packageInstalled(String packageName, int returnCode) throws RemoteException {
+
+        }
     }
 }

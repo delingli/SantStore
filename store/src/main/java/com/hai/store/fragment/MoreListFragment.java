@@ -63,12 +63,15 @@ public class MoreListFragment extends BaseFragment implements DownloadLogic.Down
     private boolean mLoading = false;
     private RelativeLayout searchHome;
     public Map<String, List<String>> exposureId = new HashMap<>();
+    public static int IA;
+    public static String IA_VALUE = "is_blue";
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_more_list, container, false);
     }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -110,7 +113,7 @@ public class MoreListFragment extends BaseFragment implements DownloadLogic.Down
         });
 //        Intent intent = getIntent();
         Bundle more = getArguments();
-
+        this.IA = more.getInt(IA_VALUE, 0);
 
         if (null != more) {
             String title = more.getString(TITLE);
@@ -152,8 +155,9 @@ public class MoreListFragment extends BaseFragment implements DownloadLogic.Down
     public interface OnMovieListScrollListener {
         void onMovieListScrolled(int distance, int offset);
     }
-    public  void addOnMovieListScrollListener(OnMovieListScrollListener mlistener){
-        this.mListener=mlistener;
+
+    public void addOnMovieListScrollListener(OnMovieListScrollListener mlistener) {
+        this.mListener = mlistener;
     }
 
     private int mDistanceY = 0;

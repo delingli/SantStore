@@ -20,7 +20,11 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
-        getSupportFragmentManager().beginTransaction().replace(R.id.flcontinerss, new MoreListFragment()).commit();
+        MoreListFragment fragment=new MoreListFragment();
+        Bundle bundle=new Bundle();
+        bundle.putInt(MoreListFragment.IA_VALUE,3);
+        fragment.setArguments(bundle);
+        getSupportFragmentManager().beginTransaction().replace(R.id.flcontinerss, fragment).commit();
 //        Intent actionIntent = getIntent();
 //        String down_list = actionIntent.getStringExtra("DOWN_LIST");
 //        Intent intent = new Intent(this, TestActivity.class);
