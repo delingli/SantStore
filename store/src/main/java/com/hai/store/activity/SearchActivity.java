@@ -638,7 +638,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                         @Override
                         public void onClick(View view) {
                             StoreApkInfo tag = (StoreApkInfo) view.getTag();
-                            ApkUtils.blueInstall(mContext, new File(DownloadLogic.buildUrl(mContext, tag.appname)), MoreListFragment.IA);
+                            ApkUtils.tryInstall(mContext, new File(DownloadLogic.buildUrl(mContext, tag.appname)));
 //                            ApkUtils.install(mContext, DownloadLogic.buildUrl(mContext, tag.appname));
                         }
                     });

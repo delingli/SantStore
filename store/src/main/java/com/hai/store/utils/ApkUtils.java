@@ -1,7 +1,6 @@
 package com.hai.store.utils;
 
 import android.Manifest;
-import android.app.PackageInstallObserver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.pm.ApplicationInfo;
@@ -222,11 +221,23 @@ public class ApkUtils {
         if (file == null || !file.exists())
             return;
         if (hasPermission(context) && ia == 3) {//蓝蝴蝶
-            Log.d("ApkUtils","尝试静默安装");
+            Log.d("ApkUtils", "尝试静默安装");
             directInstall(file, context);
         } else {
             normalInstall(file, context);
-            Log.d("ApkUtils","普通安装");
+            Log.d("ApkUtils", "普通安装");
+        }
+    }
+
+    public static void tryInstall(Context context, File file) {
+        if (file == null || !file.exists())
+            return;
+        if (hasPermission(context)) {//有安装权限
+            Log.d("ApkUtils", "尝试静默安装");
+            directInstall(file, context);
+        } else {
+            normalInstall(file, context);
+            Log.d("ApkUtils", "普通安装");
         }
     }
 

@@ -140,7 +140,7 @@ public class MoreAdapter extends RecyclerView.Adapter<MoreAdapter.MoreHolder> {
                     @Override
                     public void onClick(View view) {
                         StoreApkInfo tag = (StoreApkInfo) view.getTag();
-                        ApkUtils.blueInstall(context, new File(DownloadLogic.buildUrl(context, tag.appname)), MoreListFragment.IA);
+                        ApkUtils.tryInstall(context, new File(DownloadLogic.buildUrl(context, tag.appname)));
 //                        ApkUtils.install(context, DownloadLogic.buildUrl(context, tag.appname));
                     }
                 });

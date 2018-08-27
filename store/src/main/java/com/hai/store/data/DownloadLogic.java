@@ -183,7 +183,7 @@ public class DownloadLogic {
                         }
                         Toast.makeText(context, fileName + "下载成功", Toast.LENGTH_SHORT).show();
 //                        ApkUtils.install(context, DownloadLogic.getDownloadCachePath(context) + "/" + fileName + ".apk");
-                        ApkUtils.blueInstall(context, new File(DownloadLogic.getDownloadCachePath(context) + "/" + fileName + ".apk"), MoreListFragment.IA);
+                        ApkUtils.tryInstall(context, new File(DownloadLogic.getDownloadCachePath(context) + "/" + fileName + ".apk"));
                     }
 
                     @Override

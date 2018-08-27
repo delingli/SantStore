@@ -63,7 +63,6 @@ public class MoreListFragment extends BaseFragment implements DownloadLogic.Down
     private boolean mLoading = false;
     private RelativeLayout searchHome;
     public Map<String, List<String>> exposureId = new HashMap<>();
-    public static int IA;
     public static String IA_VALUE = "is_blue";
 
     @Nullable
@@ -113,8 +112,6 @@ public class MoreListFragment extends BaseFragment implements DownloadLogic.Down
         });
 //        Intent intent = getIntent();
         Bundle more = getArguments();
-        this.IA = more.getInt(IA_VALUE, 0);
-
         if (null != more) {
             String title = more.getString(TITLE);
             if (null != title) {

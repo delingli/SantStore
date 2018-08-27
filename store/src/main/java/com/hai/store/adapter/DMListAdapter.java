@@ -108,7 +108,8 @@ public class DMListAdapter extends RecyclerView.Adapter<DMListAdapter.DMListHold
                     @Override
                     public void onClick(View view) {
                         DownloadCart.DownloadStatus tag = (DownloadCart.DownloadStatus) view.getTag();
-                        ApkUtils.blueInstall(context,new File( DownloadLogic.buildUrl(context, tag.appName)), MoreListFragment.IA);
+                        ApkUtils.tryInstall(context,new File( DownloadLogic.buildUrl(context, tag.appName)));
+//                        ApkUtils.blueInstall(context,new File( DownloadLogic.buildUrl(context, tag.appName)), MoreListFragment.IA);
 //                        ApkUtils.install(context, DownloadLogic.buildUrl(context, tag.appName));
                     }
                 });
