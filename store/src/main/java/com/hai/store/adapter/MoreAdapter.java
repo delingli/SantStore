@@ -24,6 +24,7 @@ import com.hai.store.bean.StoreListInfo;
 import com.hai.store.data.DownloadCart;
 import com.hai.store.data.DownloadLogic;
 import com.hai.store.data.ReportLogic;
+import com.hai.store.fragment.MoreListFragment;
 import com.hai.store.sqlite.PublicDao;
 import com.hai.store.utils.ApkUtils;
 import com.hai.store.utils.Utils;
@@ -31,6 +32,7 @@ import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.List;
 
 import static com.hai.store.base.SConstant.APP_NAME;
@@ -138,7 +140,8 @@ public class MoreAdapter extends RecyclerView.Adapter<MoreAdapter.MoreHolder> {
                     @Override
                     public void onClick(View view) {
                         StoreApkInfo tag = (StoreApkInfo) view.getTag();
-                        ApkUtils.install(context, DownloadLogic.buildUrl(context, tag.appname));
+                        ApkUtils.tryInstall(context, new File(DownloadLogic.buildUrl(context, tag.appname)));
+//                        ApkUtils.install(context, DownloadLogic.buildUrl(context, tag.appname));
                     }
                 });
                 break;

@@ -10,6 +10,7 @@ import android.widget.Toast;
 import com.hai.store.Application;
 import com.hai.store.L;
 import com.hai.store.bean.DmBean;
+import com.hai.store.fragment.MoreListFragment;
 import com.hai.store.sqlite.PublicDao;
 import com.hai.store.utils.ApkUtils;
 import com.lzy.okgo.OkGo;
@@ -54,13 +55,13 @@ public class DownloadLogic {
     private Queue<String> mDownPkgQueue;
 
     /*
-    * Loop运行中的标记
-    */
+     * Loop运行中的标记
+     */
     private static AtomicBoolean mRunTag = new AtomicBoolean();
 
     /*
-    * 最大限制处理个数
-    * */
+     * 最大限制处理个数
+     * */
     private int MAX_COUNT = 0;
 
     private final AtomicInteger COUNTER = new AtomicInteger(MAX_COUNT);
@@ -181,7 +182,8 @@ public class DownloadLogic {
                             ReportLogic.report(context, rtp_method, rpt_dc, 0, null);
                         }
                         Toast.makeText(context, fileName + "下载成功", Toast.LENGTH_SHORT).show();
-                        ApkUtils.install(context, DownloadLogic.getDownloadCachePath(context) + "/" + fileName + ".apk");
+//                        ApkUtils.install(context, DownloadLogic.getDownloadCachePath(context) + "/" + fileName + ".apk");
+                        ApkUtils.tryInstall(context, new File(DownloadLogic.getDownloadCachePath(context) + "/" + fileName + ".apk"));
                     }
 
                     @Override

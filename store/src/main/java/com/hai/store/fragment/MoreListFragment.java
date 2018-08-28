@@ -63,12 +63,14 @@ public class MoreListFragment extends BaseFragment implements DownloadLogic.Down
     private boolean mLoading = false;
     private RelativeLayout searchHome;
     public Map<String, List<String>> exposureId = new HashMap<>();
+    public static String IA_VALUE = "is_blue";
 
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         return inflater.inflate(R.layout.fragment_more_list, container, false);
     }
+
 
     @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
@@ -110,8 +112,6 @@ public class MoreListFragment extends BaseFragment implements DownloadLogic.Down
         });
 //        Intent intent = getIntent();
         Bundle more = getArguments();
-
-
         if (null != more) {
             String title = more.getString(TITLE);
             if (null != title) {
@@ -152,8 +152,9 @@ public class MoreListFragment extends BaseFragment implements DownloadLogic.Down
     public interface OnMovieListScrollListener {
         void onMovieListScrolled(int distance, int offset);
     }
-    public  void addOnMovieListScrollListener(OnMovieListScrollListener mlistener){
-        this.mListener=mlistener;
+
+    public void addOnMovieListScrollListener(OnMovieListScrollListener mlistener) {
+        this.mListener = mlistener;
     }
 
     private int mDistanceY = 0;
@@ -190,7 +191,10 @@ public class MoreListFragment extends BaseFragment implements DownloadLogic.Down
                         @Override
                         public void onError(Response<String> response) {
                             super.onError(response);
-                            Toast.makeText(getActivity(), R.string.get_data_failed, Toast.LENGTH_SHORT).show();
+                            if(null!=getActivity()&&getActivity().getResources()!=null){
+                                Toast.makeText(getActivity(), R.string.get_data_failed, Toast.LENGTH_SHORT).show();
+                            }
+
                             mLoading = false;
                         }
                     }, mModeReq);

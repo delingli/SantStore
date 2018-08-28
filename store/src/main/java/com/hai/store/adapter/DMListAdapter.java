@@ -14,12 +14,14 @@ import com.hai.store.R;
 import com.hai.store.data.DownloadCart;
 import com.hai.store.data.DownloadLogic;
 import com.hai.store.data.ReportLogic;
+import com.hai.store.fragment.MoreListFragment;
 import com.hai.store.sqlite.PublicDao;
 import com.hai.store.utils.ApkUtils;
 import com.hai.store.utils.Utils;
 import com.hai.store.view.NumberProgressBar;
 import com.squareup.picasso.Picasso;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -106,7 +108,9 @@ public class DMListAdapter extends RecyclerView.Adapter<DMListAdapter.DMListHold
                     @Override
                     public void onClick(View view) {
                         DownloadCart.DownloadStatus tag = (DownloadCart.DownloadStatus) view.getTag();
-                        ApkUtils.install(context, DownloadLogic.buildUrl(context, tag.appName));
+                        ApkUtils.tryInstall(context,new File( DownloadLogic.buildUrl(context, tag.appName)));
+//                        ApkUtils.blueInstall(context,new File( DownloadLogic.buildUrl(context, tag.appName)), MoreListFragment.IA);
+//                        ApkUtils.install(context, DownloadLogic.buildUrl(context, tag.appName));
                     }
                 });
                 break;

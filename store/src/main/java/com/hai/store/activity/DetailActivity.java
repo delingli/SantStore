@@ -22,6 +22,7 @@ import com.google.gson.Gson;
 import com.hai.store.R;
 import com.hai.store.adapter.SrcUrlListAdapter;
 import com.hai.store.base.BaseActivity;
+import com.hai.store.base.SConstant;
 import com.hai.store.bean.ClickInfo;
 import com.hai.store.bean.DmBean;
 import com.hai.store.bean.StoreADInfo;
@@ -137,7 +138,7 @@ public class DetailActivity extends BaseActivity implements DownloadLogic.Downlo
         Intent intent = getIntent();
         StoreADInfo info = (StoreADInfo) intent.getSerializableExtra(DETAIL_NOTIFY);
         if (info != null) {
-            detailUrl = info.href + TMODE + TMODE_NOTIFY;
+            detailUrl = info.href + TMODE + TMODE_NOTIFY+ SConstant.CID+"-28";
             appName = info.name;
             setTitle();
             ReportLogic.report(this, "POST", info.c_rpt, 0, null);
