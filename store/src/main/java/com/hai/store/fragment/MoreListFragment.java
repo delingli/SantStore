@@ -191,7 +191,10 @@ public class MoreListFragment extends BaseFragment implements DownloadLogic.Down
                         @Override
                         public void onError(Response<String> response) {
                             super.onError(response);
-                            Toast.makeText(getActivity(), R.string.get_data_failed, Toast.LENGTH_SHORT).show();
+                            if(null!=getActivity()&&getActivity().getResources()!=null){
+                                Toast.makeText(getActivity(), R.string.get_data_failed, Toast.LENGTH_SHORT).show();
+                            }
+
                             mLoading = false;
                         }
                     }, mModeReq);
