@@ -44,7 +44,7 @@ dependencies {
 def REPO_URL = 'http://172.18.0.20:8080/repos'
 def GROUP_ID = 'com.stkj.lib'
 def ARTIFACT = 'app-store'
-def VERSION = '1.7.2'
+def VERSION = '1.7.3'
 
 
 uploadArchives {
