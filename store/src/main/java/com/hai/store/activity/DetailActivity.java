@@ -7,6 +7,7 @@ import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.Button;
@@ -35,6 +36,7 @@ import com.hai.store.utils.ApkUtils;
 import com.hai.store.utils.Utils;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
+import com.sant.api.Api;
 import com.squareup.picasso.Picasso;
 
 import static com.hai.store.base.SConstant.APP_NAME;
@@ -65,6 +67,7 @@ public class DetailActivity extends BaseActivity implements DownloadLogic.Downlo
     private int x;
     private int y;
     private long startTime;
+    public static String BKI = "55CF6E0716248405";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -138,7 +141,7 @@ public class DetailActivity extends BaseActivity implements DownloadLogic.Downlo
         Intent intent = getIntent();
         StoreADInfo info = (StoreADInfo) intent.getSerializableExtra(DETAIL_NOTIFY);
         if (info != null) {
-            detailUrl = info.href + TMODE + TMODE_NOTIFY+ SConstant.CID+"-28";
+            detailUrl = info.href + TMODE + TMODE_NOTIFY + SConstant.CID + "-28";
             appName = info.name;
             setTitle();
             ReportLogic.report(this, "POST", info.c_rpt, 0, null);
@@ -152,6 +155,21 @@ public class DetailActivity extends BaseActivity implements DownloadLogic.Downlo
                 setTitle();
             }
         }
+        if (intent != null && intent.getStringArrayExtra("rpClick") != null) {
+//            com.stkj.lib:api-1.3.6
+            final String[] rpClicks = intent.getStringArrayExtra("rpClick");
+            Api.common(getApplicationContext()).report(rpClicks, null, null);
+            Log.d("HandleBusinessService", "应用圈类型点击上报成功");
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        if (null != getIntent()) {
+            Intent backIntent = getIntent().getParcelableExtra(BKI);
+            if (null != backIntent) startActivity(backIntent);
+        }
+        super.onBackPressed();
     }
 
     private void setTitle() {
