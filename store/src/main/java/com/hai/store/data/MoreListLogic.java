@@ -19,7 +19,7 @@ public class MoreListLogic {
         String url;
         if (null == page) {
             url = SConstant.MARKET + SConstant.TYPE + SConstant.TYPE_LIST + SConstant.CID
-                    + SConstant.CID_FOUND.CID_APP_LIST + SConstant.PAGE + 1 + SConstant.TMODE + tMode;
+                    + SConstant.CID_FOUND.CID_NOTIDY_APP_LIST + SConstant.PAGE + 1 + SConstant.TMODE + tMode;
         } else {
             url = page + SConstant.TMODE + tMode;
         }

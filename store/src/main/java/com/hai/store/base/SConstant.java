@@ -48,7 +48,7 @@ public interface SConstant {
         int CID_APP_INFO = -28;//发现-应用详情页
         int CID_APP_SEARCHRESULT = -29;//发现搜索结果
         int CID_APP_SEARCH_RECOMMENDED = -27;//发现-搜索推荐
-
+        int CID_NOTIDY_APP_LIST = -31;//区分发现-notify
     }
 
     String TMODE_WIFI = "wifi"; //wifi直接下载
