@@ -26,7 +26,7 @@ public class SearchLogic {
     }
 
     public static void getRecommend(StringCallback callback) {
-        String url = SConstant.MARKET + SConstant.TYPE + SConstant.TYPE_LIST + SConstant.CID + "-13" + SConstant.PAGE + 5;
+        String url = SConstant.MARKET + SConstant.TYPE + SConstant.TYPE_LIST + SConstant.CID + "-13" + SConstant.PAGE_SIZE + 5;
         request(url, RECOMMEDN_TAG, callback);
     }
 
