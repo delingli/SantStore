@@ -115,7 +115,7 @@ public class DownloadCart {
             for (DmBean d : dmBeanList) {
                 if (null != d) {
                     File file = new File(DownloadLogic.buildUrl(context, d.appName));
-                    if (file.isFile() && file.exists()) {
+                    if (file.isFile() && file.exists()&&file.length()==Long.valueOf(d.size)) {
                         int status = ApkUtils.checkNeedDownload(context, d.packageName, Integer.valueOf(d.versionCode));
                         INSTANCE.setApkStatus(d.appId, status == ApkUtils.DOWNLOAD ? ApkUtils.INSTALL : status);
                         INSTANCE.setApkCarDownloadStatus(d.appId, new DownloadStatus(Long.valueOf(d.size),
