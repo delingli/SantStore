@@ -57,7 +57,7 @@ public interface SConstant {
     String TMODE_ICON = "icon";
 
     String PAGE = "&page=";
-
+    String PAGE_SIZE = "&pagesize=";
     String SEARCH = "&search=";
 
     /*==============================================SP KEY============================================*/
