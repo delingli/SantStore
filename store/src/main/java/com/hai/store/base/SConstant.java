@@ -41,16 +41,7 @@ public interface SConstant {
     int CID_HOT = -2; //热门应用
     int CID_WIFI = -4; //wifi ad
     String TMODE = "&tmode=";
-
-    //         "-27"=>"发现-应用列表页","-28"=>"发现-应用详情页", "-29"=>"发现搜索结果", "-30"=>"发现-搜索推荐"
-    interface CID_FOUND {
-        int CID_APP_LIST = -27;//发现-应用列表页
-        int CID_APP_INFO = -28;//发现-应用详情页
-        int CID_APP_SEARCHRESULT = -29;//发现搜索结果
-        int CID_APP_SEARCH_RECOMMENDED = -27;//发现-搜索推荐
-        int CID_NOTIDY_APP_LIST = -31;//区分发现-notify
-    }
-
+    int CID_NOTIDY_APP_LIST = -31;//区分发现-notify
     String TMODE_WIFI = "wifi"; //wifi直接下载
     String TMODE_WIFI2 = "wifi2"; //wifi进入列表和详情
     String TMODE_NOTIFY = "notify";

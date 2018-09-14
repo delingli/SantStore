@@ -129,7 +129,7 @@ public class MoreListFragment extends BaseFragment implements DownloadLogic.Down
     @Override
     public void loadData() {
         showLoading();
-        MoreListLogic.getAppList(getActivity(), null, new StringCallback() {
+        MoreListLogic.getAppList(getActivity(), null, SConstant.CID_APP_LIST, new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
                 if (handleData(response.body())) {
@@ -177,7 +177,7 @@ public class MoreListFragment extends BaseFragment implements DownloadLogic.Down
                 int lastVisibleItem = ((LinearLayoutManager) view.getLayoutManager()).findLastVisibleItemPosition();
                 if (!mLoading && visibleItemCount > 0 && state == SCROLL_STATE_IDLE && lastVisibleItem >= totalItemCount - 1) {
                     mLoading = true;
-                    MoreListLogic.getAppList(getActivity(), listInfo.href_next, new StringCallback() {
+                    MoreListLogic.getAppList(getActivity(), listInfo.href_next, SConstant.CID_APP_LIST, new StringCallback() {
                         @Override
                         public void onSuccess(Response<String> response) {
                             if (handleData(response.body())) {
@@ -191,7 +191,7 @@ public class MoreListFragment extends BaseFragment implements DownloadLogic.Down
                         @Override
                         public void onError(Response<String> response) {
                             super.onError(response);
-                            if(null!=getActivity()&&getActivity().getResources()!=null){
+                            if (null != getActivity() && getActivity().getResources() != null) {
                                 Toast.makeText(getActivity(), R.string.get_data_failed, Toast.LENGTH_SHORT).show();
                             }
 
@@ -246,7 +246,7 @@ public class MoreListFragment extends BaseFragment implements DownloadLogic.Down
     }
 
     private void refresh() {
-        MoreListLogic.getAppList(getActivity(), listInfo.href_next, new StringCallback() {
+        MoreListLogic.getAppList(getActivity(), listInfo.href_next, SConstant.CID_APP_LIST, new StringCallback() {
             @Override
             public void onSuccess(Response<String> response) {
                 if (handleData(response.body())) {

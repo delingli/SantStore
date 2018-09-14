@@ -15,11 +15,11 @@ public class MoreListLogic {
 
     private static final String TAG = "MoreListLogic_getAppList";
 
-    public static void getAppList(Context context, String page, StringCallback stringCallback, String tMode) {
+    public static void getAppList(Context context, String page, int cid, StringCallback stringCallback, String tMode) {
         String url;
         if (null == page) {
             url = SConstant.MARKET + SConstant.TYPE + SConstant.TYPE_LIST + SConstant.CID
-                    + SConstant.CID_FOUND.CID_NOTIDY_APP_LIST + SConstant.PAGE + 1 + SConstant.TMODE + tMode;
+                    + cid + SConstant.PAGE + 1 + SConstant.TMODE + tMode;
         } else {
             url = page + SConstant.TMODE + tMode;
         }
