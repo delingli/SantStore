@@ -12,6 +12,7 @@ import com.lzy.okgo.request.PostRequest;
 import java.util.List;
 
 public class ReportLogic {
+    public static String TAG = "ldl";
 
     /**
      * 上报展示时长和删除任务 或者其他人get上报
@@ -80,12 +81,18 @@ public class ReportLogic {
                 }
             }
             if ("POST".equals(rtp_method)) {
+                if (info != null) {
+                    Log.d(TAG, "我要开始上报的点击坐标x:" + info.x + "y:" + info.y);
+                }
+
                 if (0 == replace) {
                     noReplace(context, urlList, null);
+                    Log.d(TAG, "走到这里不替换宏也就不上报坐标......");
                     return;
                 }
                 if (1 == replace) {
                     replace(context, urlList, info, null);
+                    Log.d(TAG, "上报点击坐标sucess了x:" + info.x + "y:" + info.y);
                 }
             }
         }

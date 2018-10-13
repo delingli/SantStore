@@ -141,7 +141,7 @@ public class DetailActivity extends BaseActivity implements DownloadLogic.Downlo
         Intent intent = getIntent();
         StoreADInfo info = (StoreADInfo) intent.getSerializableExtra(DETAIL_NOTIFY);
         if (info != null) {
-            detailUrl = info.href + TMODE + TMODE_NOTIFY + SConstant.CID + "-28";
+            detailUrl = info.href + TMODE + TMODE_NOTIFY;
             appName = info.name;
             setTitle();
             ReportLogic.report(this, "POST", info.c_rpt, 0, null);
@@ -291,12 +291,15 @@ public class DetailActivity extends BaseActivity implements DownloadLogic.Downlo
         DownloadLogic.getInstance().setDownloadListener(this);
     }
 
+    private static String TAG = "ldl";
+
     private void buttonStatus() {
         intoApp.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 x = (int) motionEvent.getX();
                 y = (int) motionEvent.getY();
+                Log.d(TAG, "#DetailActivity#得到的点击坐标x:" + x + "y:" + y);
                 return false;
             }
         });
@@ -356,6 +359,7 @@ public class DetailActivity extends BaseActivity implements DownloadLogic.Downlo
         intoApp.setText(R.string.downloading);
         if (report) {
             ReportLogic.report(this, detailInfo.rtp_method, detailInfo.rpt_cd, detailInfo.flag_replace, new ClickInfo(x, y));
+            Log.d(TAG, "#DetailActivity#上报的点击坐标x:" + x + "y:" + y);
         }
         DownloadLogic.getInstance().startDownload(this, detailInfo.href_download, appName, detailInfo.appid, detailInfo.icon,
                 detailInfo.apk, detailInfo.versioncode, detailInfo.rpt_dc, detailInfo.rpt_dl, detailInfo.rtp_method);

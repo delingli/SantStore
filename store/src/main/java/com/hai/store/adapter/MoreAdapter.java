@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
@@ -40,7 +41,7 @@ import static com.hai.store.base.SConstant.DETAIL_ELSE;
 import static com.hai.store.base.SConstant.PKG_NAME;
 
 public class MoreAdapter extends RecyclerView.Adapter<MoreAdapter.MoreHolder> {
-
+    private static String TAG = "ldl";
     private Context context;
     public static List<StoreApkInfo> appList;
     private StoreListInfo appListInfo;
@@ -83,6 +84,7 @@ public class MoreAdapter extends RecyclerView.Adapter<MoreAdapter.MoreHolder> {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 x = (int) motionEvent.getX();
                 y = (int) motionEvent.getY();
+                Log.d(TAG, "#MoreAdapter#得到的点击坐标x:" + x + "y:" + y);
                 return false;
             }
         });
@@ -128,6 +130,7 @@ public class MoreAdapter extends RecyclerView.Adapter<MoreAdapter.MoreHolder> {
             public boolean onTouch(View view, MotionEvent motionEvent) {
                 x = (int) motionEvent.getX();
                 y = (int) motionEvent.getY();
+                Log.d(TAG, "#MoreAdapter#得到的点击坐标x:" + x + "y:" + y);
                 return false;
             }
         });

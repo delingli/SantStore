@@ -16,6 +16,7 @@ import android.support.v7.widget.SearchView;
 import android.text.TextUtils;
 import android.util.Log;
 import android.view.Gravity;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
@@ -25,13 +26,16 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.aigestudio.avatar.utils.LogUtil;
 import com.google.gson.Gson;
 import com.hai.store.Application;
 import com.hai.store.R;
+import com.hai.store.activity.DetailActivity;
 import com.hai.store.base.BaseListAdapter;
 import com.hai.store.base.BaseViewHolder;
 import com.hai.store.base.OnTipsItemClickListener;
 import com.hai.store.base.SConstant;
+import com.hai.store.bean.ClickInfo;
 import com.hai.store.bean.DmBean;
 import com.hai.store.bean.RptBean;
 import com.hai.store.bean.StoreApkInfo;
@@ -60,8 +64,7 @@ import static com.hai.store.base.SConstant.DETAIL_ELSE;
 import static com.hai.store.base.SConstant.PKG_NAME;
 
 public class SearchActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, OnTipsItemClickListener, DownloadLogic.DownloadListener {
-
-    private static final String TAG = "SearchActivity";
+    private static String TAG = "ldl";
     private FlowLayout flowLayout;
     private TextView hot;
     private LinearLayout searchTop, searchContent;
@@ -367,7 +370,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
             @Override
             public void onError(Response<String> response) {
                 super.onError(response);
-                Log.e(TAG, "loadRecommend error " + response);
+                Log.e(TAG, "#SearchActivity#loadRecommend error " + response);
             }
         });
     }
@@ -477,7 +480,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
 
         @Override
         public BaseViewHolder<SearchModel> onCreateViewHolder(ViewGroup parent, int viewType) {
-            Log.e(TAG, "onCreateViewHolder");
+            Log.e(TAG, "#SearchActivity#onCreateViewHolder");
             if (viewType == SearchModel.TYPE_NORMAL) {
                 return new SearchHolder(mInflater.inflate(R.layout.item_more_list, parent, false), listener);
             }
@@ -537,6 +540,15 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
             }
 
             vn.setText(Utils.versionName(info.versionname));
+            itemView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    x = (int) motionEvent.getX();
+                    y = (int) motionEvent.getY();
+                    Log.d(TAG,"点击坐标#SearchActivity#"+"x:"+x+"y:"+y);
+                    return false;
+                }
+            });
 
             itemView.setTag(info);
             itemView.setOnClickListener(new View.OnClickListener() {
@@ -550,10 +562,18 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                     bundle.putString(DETAIL_ELSE, SConstant.TMODE_ICON);
                     intent.putExtra(DetailActivity.DETAIL, bundle);
                     mContext.startActivity(intent);
-                    ReportLogic.report(mContext, listInfo.rtp_method, tag.rpt_ct, listInfo.flag_replace, null);
+                    ReportLogic.report(mContext, listInfo.rtp_method, tag.rpt_ct, listInfo.flag_replace, new ClickInfo(x,y));
                 }
             });
-
+            down.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    x = (int) motionEvent.getX();
+                    y = (int) motionEvent.getY();
+                    Log.d(TAG,"点击坐标#SearchActivity#"+"x:"+x+"y:"+y);
+                    return false;
+                }
+            });
             setDownButton(listInfo, info);
 
             listener.showRecommendItem(info);
@@ -561,7 +581,7 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
     }
 
     private static class SearchHolder extends BaseViewHolder<SearchModel> {
-
+        int x, y;
         TextView name, down, count, size, vn;
         ImageView icon;
         Gson gson = new Gson();
@@ -605,7 +625,14 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
             }
 
             vn.setText(Utils.versionName(info.versionname));
-
+            itemView.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    x = (int) motionEvent.getX();
+                    y = (int) motionEvent.getY();
+                    return false;
+                }
+            });
             itemView.setTag(info);
             itemView.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -618,16 +645,25 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                     bundle.putString(DETAIL_ELSE, SConstant.TMODE_ICON);
                     intent.putExtra(DetailActivity.DETAIL, bundle);
                     mContext.startActivity(intent);
-                    ReportLogic.report(mContext, resultListInfo.rtp_method, tag.rpt_ct, resultListInfo.flag_replace, null);
+                    ReportLogic.report(mContext, resultListInfo.rtp_method, tag.rpt_ct, resultListInfo.flag_replace, new ClickInfo(x, y));
                 }
             });
-
+            down.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    x = (int) motionEvent.getX();
+                    y = (int) motionEvent.getY();
+                    Log.d(TAG, "#SearchActivity#得到的点击坐标x:" + x + "y:" + y);
+                    return false;
+                }
+            });
             setDownButton(resultListInfo, info);
 
             listener.showResultItem(info);
         }
 
         void setDownButton(final StoreListInfo listInfo, StoreApkInfo info) {
+
             int apkStatus = ApkUtils.getStatus(mContext, info.appid, info.apk, Integer.valueOf(info.versioncode));
             down.setTag(info);
             switch (apkStatus) {
@@ -737,7 +773,8 @@ public class SearchActivity extends AppCompatActivity implements SearchView.OnQu
                 }
             } else {
                 if (report) {
-                    ReportLogic.report(mContext, listInfo.rtp_method, info.rpt_cd, listInfo.flag_replace, null);
+                    Log.d(TAG,"开始上报点击坐标#SearchActivity#"+"x:"+x+"y:"+y);
+                    ReportLogic.report(mContext, listInfo.rtp_method, info.rpt_cd, listInfo.flag_replace, new ClickInfo(x, y));
                 }
                 DownloadLogic.getInstance().startDownload(mContext, info.href_download, info.appname,
                         info.appid, info.icon, info.apk, info.versioncode, info.rpt_dc, info.rpt_dl, listInfo.rtp_method);

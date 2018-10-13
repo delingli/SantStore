@@ -3,7 +3,7 @@ apply plugin: 'maven'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion "25.0.3"
+    buildToolsVersion '26.0.0'
 
     defaultConfig {
         minSdkVersion 15
@@ -46,7 +46,7 @@ dependencies {
 def REPO_URL = 'http://172.18.0.20:8080/repos'
 def GROUP_ID = 'com.stkj.lib'
 def ARTIFACT = 'app-store'
-def VERSION = '1.7.6'
+def VERSION = '1.7.7'
 
 
 uploadArchives {
