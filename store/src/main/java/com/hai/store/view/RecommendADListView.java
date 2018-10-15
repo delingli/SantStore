@@ -176,6 +176,14 @@ public class RecommendADListView extends FrameLayout implements DownloadLogic.Do
         });
 
         oneKeyInstall.setText(R.string.store_one_key_install);
+        oneKeyInstall.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+               x= (int) motionEvent.getX();
+               y= (int) motionEvent.getY();
+                return false;
+            }
+        });
         oneKeyInstall.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {

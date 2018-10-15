@@ -12,6 +12,7 @@ import android.support.v7.widget.RecyclerView;
 import android.util.SparseBooleanArray;
 import android.view.Gravity;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
@@ -24,6 +25,7 @@ import android.widget.Toast;
 import com.hai.store.Application;
 import com.hai.store.R;
 import com.hai.store.adapter.OneAppHolder;
+import com.hai.store.bean.ClickInfo;
 import com.hai.store.bean.DmBean;
 import com.hai.store.bean.StoreApkInfo;
 import com.hai.store.bean.StoreListInfo;
@@ -45,6 +47,8 @@ public class SplashRecommend extends DialogFragment {
     private StoreListInfo mStoreListInfo;
     private Adapter mAdapter;
     private StoreLoadResourceListener mLoadListener;
+    private int x;
+    private int y;
 
     public void setStoreLoadResourceListener(StoreLoadResourceListener listener) {
         mLoadListener = listener;
@@ -99,12 +103,20 @@ public class SplashRecommend extends DialogFragment {
             mContent.setLayoutManager(new GridLayoutManager(getActivity(), 3));
             mContent.setAdapter(mAdapter = new Adapter(getActivity(), mStoreListInfo));
             mContent.setItemAnimator(null);
+            mInstall.setOnTouchListener(new View.OnTouchListener() {
+                @Override
+                public boolean onTouch(View view, MotionEvent motionEvent) {
+                    x = (int) motionEvent.getX();
+                    y = (int) motionEvent.getY();
+                    return false;
+                }
+            });
             mInstall.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     List<StoreApkInfo> checkApp = mAdapter.getCheckApp();
                     if (checkApp.size() > 0) {
-                        List<DmBean> list = buildDMBeanList(checkApp);
+                        List<DmBean> list = buildDMBeanList(checkApp, new ClickInfo(x, y));
                         DownloadLogic.getInstance().addQueue(list);
                         dismiss();
                     } else {
@@ -131,20 +143,20 @@ public class SplashRecommend extends DialogFragment {
         }
     }
 
-    private List<DmBean> buildDMBeanList(List<StoreApkInfo> apkInfos) {
+    private List<DmBean> buildDMBeanList(List<StoreApkInfo> apkInfos, ClickInfo clickInfo) {
         List<DmBean> list = new ArrayList<>();
         for (StoreApkInfo apkInfo : apkInfos) {
-            list.add(buildDMBean(apkInfo));
+            list.add(buildDMBean(apkInfo, clickInfo));
         }
         return list;
     }
 
-    private DmBean buildDMBean(StoreApkInfo apkInfo) {
+    private DmBean buildDMBean(StoreApkInfo apkInfo, ClickInfo clickInfo) {
         DmBean dmBean = new DmBean(apkInfo.appid, apkInfo.appname, apkInfo.apk, apkInfo.versioncode,
                 apkInfo.versionname, apkInfo.size, apkInfo.icon, apkInfo.href_download, apkInfo.rpt_dc,
                 apkInfo.rpt_ic, apkInfo.rpt_ac, apkInfo.rpt_dl, mStoreListInfo.rtp_method);
         ReportLogic.report(Application.getContext(), mStoreListInfo.rtp_method, apkInfo.rpt_cd,
-                mStoreListInfo.flag_replace, null);
+                mStoreListInfo.flag_replace, clickInfo);
         return dmBean;
     }
 

@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -14,6 +15,7 @@ import com.hai.store.R;
 import com.hai.store.activity.DetailActivity;
 import com.hai.store.activity.MoreListActivity;
 import com.hai.store.base.SConstant;
+import com.hai.store.bean.ClickInfo;
 import com.hai.store.bean.StoreApkInfo;
 import com.hai.store.bean.StoreListInfo;
 import com.hai.store.data.ReportLogic;
@@ -49,6 +51,8 @@ public class WifiOneADActivity extends Activity {
     private Gson gson = new Gson();
     private StoreApkInfo mInfo;
     private Random RANDOM = new Random();
+    private int y;
+    private int x;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -163,11 +167,19 @@ public class WifiOneADActivity extends Activity {
         });
 
         TextView oneKey = (TextView) findViewById(R.id.wifi_one_key);
+        oneKey.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                x = (int) motionEvent.getX();
+                y = (int) motionEvent.getY();
+                return false;
+            }
+        });
         oneKey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 if (null != mInfo) {
-                    ReportLogic.report(WifiOneADActivity.this, "POST", mInfo.rpt_ct, 0, null);
+                    ReportLogic.report(WifiOneADActivity.this, "POST", mInfo.rpt_ct, 0, new ClickInfo(x,y));
                     buildDetailIntent();
                 }
                 finish();

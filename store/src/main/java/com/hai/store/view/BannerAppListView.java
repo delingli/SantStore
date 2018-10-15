@@ -137,7 +137,7 @@ public class BannerAppListView extends FrameLayout {
         if (null != info1) {
             Picasso.with(context).load(info1.icon).placeholder(R.drawable.ic_loading).error(R.drawable.ic_loading).into(icon1);
             name1.setText(info1.appname);
-            ReportLogic.report(context, appListInfo.rtp_method, info1.rpt_ss, 0, null);
+            ReportLogic.report(context, appListInfo.rtp_method, info1.rpt_ss, 0, new ClickInfo(x,y));
         }
         if (null != info2) {
             Picasso.with(context).load(info2.icon).placeholder(R.drawable.ic_loading).error(R.drawable.ic_loading).into(icon2);
@@ -155,12 +155,28 @@ public class BannerAppListView extends FrameLayout {
             ReportLogic.report(context, appListInfo.rtp_method, info4.rpt_ss, 0, null);
         }
         content.setVisibility(VISIBLE);
+        layout1.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                x= (int) motionEvent.getX();
+                y= (int) motionEvent.getY();
+                return false;
+            }
+        });
         layout1.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (null != info1) {
                     reportAndSave(context, info1);
                 }
+            }
+        });
+        layout2.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                x= (int) motionEvent.getX();
+                y= (int) motionEvent.getY();
+                return false;
             }
         });
         layout2.setOnClickListener(new OnClickListener() {
@@ -171,6 +187,14 @@ public class BannerAppListView extends FrameLayout {
                 }
             }
         });
+        layout3.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                x= (int) motionEvent.getX();
+                y= (int) motionEvent.getY();
+                return false;
+            }
+        });
         layout3.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -179,12 +203,28 @@ public class BannerAppListView extends FrameLayout {
                 }
             }
         });
+        layout4.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                x= (int) motionEvent.getX();
+                y= (int) motionEvent.getY();
+                return false;
+            }
+        });
         layout4.setOnClickListener(new OnClickListener() {
             @Override
             public void onClick(View view) {
                 if (null != info4) {
                     reportAndSave(context, info4);
                 }
+            }
+        });
+        mAll.setOnTouchListener(new OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                x= (int) motionEvent.getX();
+                y= (int) motionEvent.getY();
+                return false;
             }
         });
         mAll.setOnClickListener(new OnClickListener() {

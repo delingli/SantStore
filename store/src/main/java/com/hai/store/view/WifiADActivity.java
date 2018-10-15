@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
@@ -18,6 +19,7 @@ import com.google.gson.Gson;
 import com.hai.store.R;
 import com.hai.store.activity.MoreListActivity;
 import com.hai.store.base.SConstant;
+import com.hai.store.bean.ClickInfo;
 import com.hai.store.bean.DmBean;
 import com.hai.store.bean.StoreApkInfo;
 import com.hai.store.bean.StoreListInfo;
@@ -50,6 +52,8 @@ public class WifiADActivity extends Activity {
     private List<StoreApkInfo> tempList = new ArrayList<>();
     private Gson gson = new Gson();
     private ADAdapter mAdapter;
+    private int x;
+    private int y;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -94,10 +98,18 @@ public class WifiADActivity extends Activity {
     private void show() {
         mRecycler.setLayoutManager(new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false));
         mRecycler.setAdapter(mAdapter = new ADAdapter(this, tempList, appListInfo));
+        mOneKey.setOnTouchListener(new View.OnTouchListener() {
+            @Override
+            public boolean onTouch(View view, MotionEvent motionEvent) {
+                x = (int) motionEvent.getX();
+                y = (int) motionEvent.getY();
+                return false;
+            }
+        });
         mOneKey.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                mAdapter.onKeyDownload();
+                mAdapter.onKeyDownload(new ClickInfo(x,y));
                 finish();
             }
         });
@@ -215,14 +227,14 @@ public class WifiADActivity extends Activity {
             return 4;
         }
 
-        void onKeyDownload() {
+        void onKeyDownload(ClickInfo clickInfo) {
             for (StoreApkInfo info : checkInfo) {
-                reportAndSave(context, info);
+                reportAndSave(context, info,clickInfo);
             }
         }
 
-        private void reportAndSave(Context context, StoreApkInfo info) {
-            ReportLogic.report(context, listInfo.rtp_method, info.rpt_cd, listInfo.flag_replace, null); // TODO: 17-9-29 替换坐标
+        private void reportAndSave(Context context, StoreApkInfo info, ClickInfo clickInfo) {
+            ReportLogic.report(context, listInfo.rtp_method, info.rpt_cd, listInfo.flag_replace, clickInfo); // TODO: 17-9-29 替换坐标
             DownloadLogic.getInstance().startDownload(context, info.href_download, info.appname,
                     info.appid, info.icon, info.apk, info.versioncode, info.rpt_dc, info.rpt_dl, listInfo.rtp_method);
             PublicDao.insert(buildDmBean(info));
