@@ -92,7 +92,11 @@ public class ReportLogic {
                 }
                 if (1 == replace) {
                     replace(context, urlList, info, null);
-                    Log.d(TAG, "上报点击坐标sucess了x:" + info.x + "y:" + info.y);
+                    Log.d(TAG, "母猪的产后护理...");
+                    if (info != null) {
+                        Log.d(TAG, "上报点击坐标sucess了x:" + info.x + "y:" + info.y);
+                    }
+
                 }
             }
         }
