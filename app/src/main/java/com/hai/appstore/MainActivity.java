@@ -3,7 +3,9 @@ package com.hai.appstore;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 
+import com.hai.store.activity.MoreListActivity;
 import com.hai.store.fragment.MoreListFragment;
 
 
@@ -20,6 +22,8 @@ public class MainActivity extends AppCompatActivity {
 
             }
         });
+//        Intent intent=new Intent(MainActivity.this,MoreListActivity.class);
+//        MainActivity.this.startActivity(intent);
         MoreListFragment fragment=new MoreListFragment();
         Bundle bundle=new Bundle();
         bundle.putInt(MoreListFragment.IA_VALUE,3);

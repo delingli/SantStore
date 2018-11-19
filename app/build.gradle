@@ -2,7 +2,7 @@ apply plugin: 'com.android.application'
 
 android {
     compileSdkVersion 25
-    buildToolsVersion '26.0.0'
+    buildToolsVersion '27.0.3'
 
     defaultConfig {
         applicationId "com.sant.zhuoyi"
@@ -14,8 +14,8 @@ android {
 
     signingConfigs {
         test {
-            storeFile file("zhuoyi.jks")
-            keyAlias "zhuoyi"
+            storeFile file("test.jks")
+            keyAlias "santistore"
             keyPassword "123456"
             storePassword "123456"
         }
@@ -34,6 +34,9 @@ android {
     }
     flavorDimensions "channel"
     productFlavors {
+        AA518 {
+            manifestPlaceholders = [UMENG_CHANNEL_VALUE: "AA518"]
+        }
         AA506 {
             manifestPlaceholders = [UMENG_CHANNEL_VALUE: "AA506"]
         }
@@ -53,8 +56,9 @@ android {
 }
 
 dependencies {
-    compile fileTree(include: ['*.jar'], dir: 'libs')
-    compile 'com.android.support:appcompat-v7:25.3.1'
+    api fileTree(include: ['*.jar'], dir: 'libs')
+    //noinspection GradleCompatible
+    api 'com.android.support:appcompat-v7:25.3.1'
     //    compile 'com.stkj.lib:app-store:1.6.9'
-    compile project(':store')
+    api project(':store')
 }

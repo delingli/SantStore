@@ -70,9 +70,9 @@ public class Utils {
             i = v / 10000.00;
             BigDecimal bi = new BigDecimal(i);
             v = bi.setScale(2, BigDecimal.ROUND_HALF_UP).doubleValue();
-            return String.valueOf(v) + "亿人下载";
+            return String.valueOf(v) + "亿人在用";
         } else {
-            return String.valueOf(v) + "万人下载";
+            return String.valueOf(v) + "万人在用";
         }
     }
 

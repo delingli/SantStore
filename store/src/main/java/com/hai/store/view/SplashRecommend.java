@@ -1,29 +1,35 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by Fernflower decompiler)
+//
+
 package com.hai.store.view;
 
 import android.app.Dialog;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.RecyclerView.ItemAnimator;
 import android.util.SparseBooleanArray;
-import android.view.Gravity;
 import android.view.LayoutInflater;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.view.Window;
-import android.view.WindowManager;
+import android.view.View.OnClickListener;
+import android.view.WindowManager.LayoutParams;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
-
+import android.widget.CompoundButton.OnCheckedChangeListener;
 import com.hai.store.Application;
-import com.hai.store.R;
+import com.hai.store.R.drawable;
+import com.hai.store.R.id;
+import com.hai.store.R.layout;
 import com.hai.store.adapter.OneAppHolder;
 import com.hai.store.bean.ClickInfo;
 import com.hai.store.bean.DmBean;
@@ -33,150 +39,149 @@ import com.hai.store.data.DownloadLogic;
 import com.hai.store.data.ReportLogic;
 import com.hai.store.utils.Device;
 import com.squareup.picasso.Picasso;
-
 import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
 
 public class SplashRecommend extends DialogFragment {
-
     private static final String TAG = "SplashRecommend";
-    private TextView mInstall, mChange, mCancel;
+    private TextView mInstall;
+    private TextView mChange;
+    private TextView mCancel;
     private RecyclerView mContent;
     private StoreListInfo mStoreListInfo;
-    private Adapter mAdapter;
+    private SplashRecommend.Adapter mAdapter;
     private StoreLoadResourceListener mLoadListener;
-    private int x;
-    private int y;
+
+    public SplashRecommend() {
+    }
 
     public void setStoreLoadResourceListener(StoreLoadResourceListener listener) {
-        mLoadListener = listener;
+        this.mLoadListener = listener;
     }
 
     public void setData(StoreListInfo storeListInfo) {
-        mStoreListInfo = storeListInfo;
+        this.mStoreListInfo = storeListInfo;
     }
 
     public void reLoad() {
-        if (mAdapter != null) mAdapter.upDateStatus(mStoreListInfo.list);
+        if (this.mAdapter != null) {
+            this.mAdapter.upDateStatus(this.mStoreListInfo.list);
+        }
+
     }
 
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.dc_frame_splash_recommend, container, false);
+        return inflater.inflate(layout.dc_frame_splash_recommend, container, false);
     }
 
-    @Override
     public void onActivityCreated(Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        Window dialogWindow = getDialog().getWindow();
-        WindowManager.LayoutParams params = dialogWindow.getAttributes();
+        Window dialogWindow = this.getDialog().getWindow();
+        LayoutParams params = dialogWindow.getAttributes();
         params.width = Device.getScreenSize(Application.getContext())[0] - Device.dp2px(Application.getContext(), 20);
-        params.height = WindowManager.LayoutParams.WRAP_CONTENT;
-        params.gravity = Gravity.CENTER;
+        params.height = -2;
+        params.gravity = 17;
         params.y = Device.dp2px(Application.getContext(), 10);
         dialogWindow.setAttributes(params);
     }
 
     @NonNull
-    @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
         Dialog dialog = super.onCreateDialog(savedInstanceState);
-        dialog.getWindow().requestFeature(Window.FEATURE_NO_TITLE);
-        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
+        dialog.getWindow().requestFeature(1);
+        dialog.getWindow().setBackgroundDrawable(new ColorDrawable(0));
         dialog.setCanceledOnTouchOutside(false);
         return dialog;
     }
 
-    @Override
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
-        findView(view);
-        if (null != mStoreListInfo) {
-            showData();
+        this.findView(view);
+        if (null != this.mStoreListInfo) {
+            this.showData();
         }
+
     }
 
     private void showData() {
-        if (null == mAdapter) {
-            mContent.setLayoutManager(new GridLayoutManager(getActivity(), 3));
-            mContent.setAdapter(mAdapter = new Adapter(getActivity(), mStoreListInfo));
-            mContent.setItemAnimator(null);
-            mInstall.setOnTouchListener(new View.OnTouchListener() {
-                @Override
-                public boolean onTouch(View view, MotionEvent motionEvent) {
-                    x = (int) motionEvent.getX();
-                    y = (int) motionEvent.getY();
-                    return false;
-                }
-            });
-            mInstall.setOnClickListener(new View.OnClickListener() {
-                @Override
+        if (null == this.mAdapter) {
+            this.mContent.setLayoutManager(new GridLayoutManager(this.getActivity(), 3));
+            this.mContent.setAdapter(this.mAdapter = new Adapter(getActivity(), mStoreListInfo));
+            this.mContent.setItemAnimator((ItemAnimator)null);
+            this.mInstall.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
-                    List<StoreApkInfo> checkApp = mAdapter.getCheckApp();
+                    List<StoreApkInfo> checkApp = SplashRecommend.this.mAdapter.getCheckApp();
                     if (checkApp.size() > 0) {
-                        List<DmBean> list = buildDMBeanList(checkApp, new ClickInfo(x, y));
+                        List<DmBean> list = SplashRecommend.this.buildDMBeanList(checkApp);
                         DownloadLogic.getInstance().addQueue(list);
-                        dismiss();
+                        SplashRecommend.this.dismiss();
                     } else {
-                        Toast.makeText(getActivity(), "请选择应用", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(SplashRecommend.this.getActivity(), "请选择应用", Toast.LENGTH_SHORT).show();
                     }
+
                 }
             });
-            mCancel.setOnClickListener(new View.OnClickListener() {
-                @Override
+            this.mCancel.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
-                    if (null != mAdapter) mAdapter.unCheckAll();
+                    if (null != SplashRecommend.this.mAdapter) {
+                        SplashRecommend.this.mAdapter.unCheckAll();
+                    }
+
                 }
             });
-            mChange.setOnClickListener(new View.OnClickListener() {
-                @Override
+            this.mChange.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
-                    if (null != mLoadListener) {
-                        mLoadListener.onReload();
+                    if (null != SplashRecommend.this.mLoadListener) {
+                        SplashRecommend.this.mLoadListener.onReload();
                     }
+
                 }
             });
         } else {
-            mAdapter.upDateStatus(mStoreListInfo.list);
+            this.mAdapter.upDateStatus(this.mStoreListInfo.list);
         }
+
     }
 
-    private List<DmBean> buildDMBeanList(List<StoreApkInfo> apkInfos, ClickInfo clickInfo) {
-        List<DmBean> list = new ArrayList<>();
-        for (StoreApkInfo apkInfo : apkInfos) {
-            list.add(buildDMBean(apkInfo, clickInfo));
+    private List<DmBean> buildDMBeanList(List<StoreApkInfo> apkInfos) {
+        List<DmBean> list = new ArrayList();
+        Iterator var3 = apkInfos.iterator();
+
+        while(var3.hasNext()) {
+            StoreApkInfo apkInfo = (StoreApkInfo)var3.next();
+            list.add(this.buildDMBean(apkInfo));
         }
+
         return list;
     }
 
-    private DmBean buildDMBean(StoreApkInfo apkInfo, ClickInfo clickInfo) {
-        DmBean dmBean = new DmBean(apkInfo.appid, apkInfo.appname, apkInfo.apk, apkInfo.versioncode,
-                apkInfo.versionname, apkInfo.size, apkInfo.icon, apkInfo.href_download, apkInfo.rpt_dc,
-                apkInfo.rpt_ic, apkInfo.rpt_ac, apkInfo.rpt_dl, mStoreListInfo.rtp_method);
-        ReportLogic.report(Application.getContext(), mStoreListInfo.rtp_method, apkInfo.rpt_cd,
-                mStoreListInfo.flag_replace, clickInfo);
+    private DmBean buildDMBean(StoreApkInfo apkInfo) {
+        DmBean dmBean = new DmBean(apkInfo.appid, apkInfo.appname, apkInfo.apk, apkInfo.versioncode, apkInfo.versionname, apkInfo.size, apkInfo.icon, apkInfo.href_download, apkInfo.rpt_dc, apkInfo.rpt_ic, apkInfo.rpt_ac, apkInfo.rpt_dl, this.mStoreListInfo.rtp_method);
+        ReportLogic.report(Application.getContext(), this.mStoreListInfo.rtp_method, apkInfo.rpt_cd, this.mStoreListInfo.flag_replace, (ClickInfo)null);
         return dmBean;
     }
 
     private void findView(View view) {
-        mInstall = (TextView) view.findViewById(R.id.splash_install);
-        mCancel = (TextView) view.findViewById(R.id.splash_un_all_check);
-        mChange = (TextView) view.findViewById(R.id.splash_change);
-        ImageView mClose = (ImageView) view.findViewById(R.id.splash_close);
-        mClose.setOnClickListener(new View.OnClickListener() {
-            @Override
+        this.mInstall = (TextView)view.findViewById(id.splash_install);
+        this.mCancel = (TextView)view.findViewById(id.splash_un_all_check);
+        this.mChange = (TextView)view.findViewById(id.splash_change);
+        ImageView mClose = (ImageView)view.findViewById(id.splash_close);
+        mClose.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                dismiss();
-                if (null != mLoadListener) mLoadListener.onExit();
+                SplashRecommend.this.dismiss();
+                if (null != SplashRecommend.this.mLoadListener) {
+                    SplashRecommend.this.mLoadListener.onExit();
+                }
+
             }
         });
-        mContent = (RecyclerView) view.findViewById(R.id.splash_recycle);
+        this.mContent = (RecyclerView)view.findViewById(id.splash_recycle);
     }
 
-    private static class Adapter extends RecyclerView.Adapter<OneAppHolder> {
-
+    private static class Adapter extends android.support.v7.widget.RecyclerView.Adapter<OneAppHolder> {
         private Context mContext;
         private StoreListInfo mListInfo;
         private List<StoreApkInfo> mInfoList;
@@ -185,73 +190,73 @@ public class SplashRecommend extends DialogFragment {
         private Set<String> showReport;
 
         private Adapter(Context context, StoreListInfo listInfo) {
-            mContext = context;
-            checkPosition = new SparseBooleanArray();
-            showReport = new HashSet<>();
-            mFrom = LayoutInflater.from(mContext);
-            mListInfo = listInfo;
-            mInfoList = listInfo.list;
-            for (int i = 0; i < mInfoList.size(); i++) {
-                checkPosition.put(i, true);
+            this.mContext = context;
+            this.checkPosition = new SparseBooleanArray();
+            this.showReport = new HashSet();
+            this.mFrom = LayoutInflater.from(this.mContext);
+            this.mListInfo = listInfo;
+            this.mInfoList = listInfo.list;
+
+            for(int i = 0; i < this.mInfoList.size(); ++i) {
+                this.checkPosition.put(i, true);
             }
+
         }
 
-        //一键安装
         private List<StoreApkInfo> getCheckApp() {
-            List<StoreApkInfo> checkList = new ArrayList<>();
-            for (int i = 0; i < mInfoList.size(); i++) {
-                if (i >= 9) break; //返回不能超过9个
-                if (checkPosition.get(i)) {
-                    checkList.add(mInfoList.get(i));
+            List<StoreApkInfo> checkList = new ArrayList();
+
+            for(int i = 0; i < this.mInfoList.size() && i < 9; ++i) {
+                if (this.checkPosition.get(i)) {
+                    checkList.add(this.mInfoList.get(i));
                 }
             }
+
             return checkList;
         }
 
-        //换一批
         private void upDateStatus(List<StoreApkInfo> infoList) {
-            checkPosition.clear();
-            mInfoList = infoList;
-            for (int i = 0; i < mInfoList.size(); i++) {
-                checkPosition.put(i, true);
+            this.checkPosition.clear();
+            this.mInfoList = infoList;
+
+            for(int i = 0; i < this.mInfoList.size(); ++i) {
+                this.checkPosition.put(i, true);
             }
-            notifyDataSetChanged();
+
+            this.notifyDataSetChanged();
         }
 
-        //取消选择
         private void unCheckAll() {
-            for (int i = 0; i < checkPosition.size(); i++) {
-                checkPosition.put(i, false);
+            for(int i = 0; i < this.checkPosition.size(); ++i) {
+                this.checkPosition.put(i, false);
             }
-            notifyDataSetChanged();
+
+            this.notifyDataSetChanged();
         }
 
-        @Override
         public OneAppHolder onCreateViewHolder(ViewGroup parent, int viewType) {
-            return new OneAppHolder(mFrom.inflate(R.layout.item_grid_recommend, parent, false));
+            return new OneAppHolder(this.mFrom.inflate(layout.item_grid_recommend, parent, false));
         }
 
-        @Override
         public void onBindViewHolder(final OneAppHolder holder, int position) {
-            StoreApkInfo apkInfo = mInfoList.get(position);
-            holder.appCheck.setChecked(checkPosition.get(position));
-            holder.appCheck.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                @Override
+            StoreApkInfo apkInfo = (StoreApkInfo)this.mInfoList.get(position);
+            holder.appCheck.setChecked(this.checkPosition.get(position));
+            holder.appCheck.setOnCheckedChangeListener(new OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    checkPosition.put(holder.getAdapterPosition(), isChecked);
+                    Adapter.this.checkPosition.put(holder.getAdapterPosition(), isChecked);
                 }
             });
             holder.appName.setText(apkInfo.appname);
-            Picasso.with(mContext).load(apkInfo.icon).placeholder(R.drawable.ic_loading).error(R.drawable.ic_loading).into(holder.appIcon);
-            if (!showReport.contains(apkInfo.appid)) {
-                showReport.add(apkInfo.appid);
-                ReportLogic.report(Application.getContext(), mListInfo.rtp_method, apkInfo.rpt_ss, mListInfo.flag_replace, null);
+            Picasso.with(this.mContext).load(apkInfo.icon).placeholder(drawable.ic_loading).error(drawable.ic_loading).into(holder.appIcon);
+            if (!this.showReport.contains(apkInfo.appid)) {
+                this.showReport.add(apkInfo.appid);
+                ReportLogic.report(Application.getContext(), this.mListInfo.rtp_method, apkInfo.rpt_ss, this.mListInfo.flag_replace, (ClickInfo)null);
             }
+
         }
 
-        @Override
         public int getItemCount() {
-            return null == mInfoList ? 0 : (mInfoList.size() > 9 ? 9 : mInfoList.size());
+            return null == this.mInfoList ? 0 : (this.mInfoList.size() > 9 ? 9 : this.mInfoList.size());
         }
     }
 }

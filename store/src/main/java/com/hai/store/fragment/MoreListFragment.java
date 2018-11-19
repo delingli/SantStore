@@ -1,16 +1,25 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by Fernflower decompiler)
+//
+
 package com.hai.store.fragment;
 
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.v4.widget.SwipeRefreshLayout;
+import android.support.v4.widget.SwipeRefreshLayout.OnRefreshListener;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.Toolbar;
+import android.support.v7.widget.RecyclerView.LayoutManager;
+import android.support.v7.widget.RecyclerView.OnScrollListener;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
@@ -20,35 +29,42 @@ import android.widget.Toast;
 
 import com.google.gson.Gson;
 import com.hai.store.Application;
-import com.hai.store.R;
+import com.hai.store.R.id;
+import com.hai.store.R.layout;
+import com.hai.store.R.string;
 import com.hai.store.activity.DMActivity;
 import com.hai.store.activity.SearchActivity;
 import com.hai.store.adapter.MoreAdapter;
 import com.hai.store.base.SConstant;
+import com.hai.store.bean.ClickInfo;
 import com.hai.store.bean.DmBean;
 import com.hai.store.bean.StoreApkInfo;
 import com.hai.store.bean.StoreListInfo;
 import com.hai.store.data.DownloadLogic;
 import com.hai.store.data.MoreListLogic;
 import com.hai.store.data.ReportLogic;
+import com.hai.store.data.DownloadLogic.DownloadListener;
+import com.hai.store.mildperate.MildOperatorConfig;
+import com.hai.store.mildperate.MildperateConstant;
 import com.hai.store.sqlite.PublicDao;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.model.Response;
+import com.sant.api.APIError;
+import com.sant.api.Api;
+import com.sant.api.Callback;
+import com.sant.api.common.ADDAPPStore;
+import com.sant.api.common.ADData;
 
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
-import static android.support.v7.widget.RecyclerView.SCROLL_STATE_IDLE;
-
-/**
- * create by ldl2018/8/22 0022
- */
-
-public class MoreListFragment extends BaseFragment implements DownloadLogic.DownloadListener {
-
+public class MoreListFragment extends BaseFragment implements DownloadListener {
     public static final String MORE = "more";
     public static final String TITLE = "title";
+    public static final String ISSHOW_SEARCH_RESULT = "isshow_search_result";
+    public static final String ISSHOW_SEARCH_RECOMMER = "isshow_search_recommer";
     public static final String DOWN_LIST = "DOWN_LIST";
     private RecyclerView mRecyclerView;
     private TextView mTitle;
@@ -57,255 +73,264 @@ public class MoreListFragment extends BaseFragment implements DownloadLogic.Down
     private ProgressBar progressBar;
     private ImageView gotoDM;
     private SwipeRefreshLayout refreshLayout;
-    private String mModeReq = SConstant.TMODE_ICON;
+    private String mModeReq = "icon";
     private StoreListInfo listInfo;
     private MoreAdapter moreAdapter;
     private boolean mLoading = false;
     private RelativeLayout searchHome;
-    public Map<String, List<String>> exposureId = new HashMap<>();
+    public Map<String, List<String>> exposureId = new HashMap();
     public static String IA_VALUE = "is_blue";
+    private MildOperatorConfig config = new MildOperatorConfig();
+    private MoreListFragment.OnMovieListScrollListener mListener;
+    private int mDistanceY = 0;
+
+    public MoreListFragment() {
+    }
 
     @Nullable
-    @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.fragment_more_list, container, false);
+        return inflater.inflate(layout.fragment_more_list, container, false);
     }
 
-
-    @Override
     public void onActivityCreated(@Nullable Bundle savedInstanceState) {
         super.onActivityCreated(savedInstanceState);
-        setLogic();
-        loadData();
+        this.setLogic();
+        this.initSearch();
     }
 
-
-    @Override
     public void findView(View view) {
-        mRecyclerView = (RecyclerView) view.findViewById(R.id.more_list);
-        Toolbar toolbar = (Toolbar) view.findViewById(R.id.more_toolbar);
-//        toolbar.setNavigationIcon(R.drawable.ic_home);
-        searchHome = (RelativeLayout) view.findViewById(R.id.search_home);
-//        toolbar.setNavigationIcon(-1);
-//        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Toast.makeText(getActivity(), "^_^", Toast.LENGTH_SHORT).show();
-//            }
-//        });
-        gotoDM = (ImageView) view.findViewById(R.id.goto_dm);
-        refreshLayout = (SwipeRefreshLayout) view.findViewById(R.id.more_swipe);
-        progressBar = (ProgressBar) view.findViewById(R.id.progress);
-        errorView = (RelativeLayout) view.findViewById(R.id.error_view);
-        reload = (Button) view.findViewById(R.id.btn_reload);
-        mTitle = (TextView) view.findViewById(R.id.more_title);
+        this.mRecyclerView = (RecyclerView) view.findViewById(id.more_list);
+        Toolbar toolbar = (Toolbar) view.findViewById(id.more_toolbar);
+        this.searchHome = (RelativeLayout) view.findViewById(id.search_home);
+        this.gotoDM = (ImageView) view.findViewById(id.goto_dm);
+        this.refreshLayout = (SwipeRefreshLayout) view.findViewById(id.more_swipe);
+        this.progressBar = (ProgressBar) view.findViewById(id.progress);
+        this.errorView = (RelativeLayout) view.findViewById(id.error_view);
+        this.reload = (Button) view.findViewById(id.btn_reload);
+        this.mTitle = (TextView) view.findViewById(id.more_title);
     }
 
-    @Override
     public void setLogic() {
-
-        gotoDM.setOnClickListener(new View.OnClickListener() {
-            @Override
+        this.gotoDM.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
-                startActivity(new Intent(getActivity(), DMActivity.class));
+                MoreListFragment.this.startActivity(new Intent(MoreListFragment.this.getActivity(), DMActivity.class));
             }
         });
-//        Intent intent = getIntent();
-        Bundle more = getArguments();
+        Bundle more = this.getArguments();
         if (null != more) {
-            String title = more.getString(TITLE);
+            String title = more.getString("title");
             if (null != title) {
-                mTitle.setText(title);
+                this.mTitle.setText(title);
             }
-            String tMode = more.getString(SConstant.LIST_MODE);
+
+            String tMode = more.getString("list_mode");
             if (null != tMode) {
-                mModeReq = tMode;
+                this.mModeReq = tMode;
             }
-            handleDownList(more.getString(DOWN_LIST, null));
+
+            this.handleDownList(more.getString("DOWN_LIST", (String) null));
+        }
+
+        Api.common(this.getContext()).fetchADAPPStore(MildperateConstant.APP_DISCOVER,  null, new Callback<ADData>() {
+            public void onFinish(boolean isSucess, ADData adData, APIError apiError, Object o) {
+                String market = "";
+                if (isSucess) {
+                    if (adData != null && adData instanceof ADDAPPStore) {
+                        ADDAPPStore addappstore = (ADDAPPStore) adData;
+                        market = addappstore.market;
+                    }
+                } else {
+                    Log.d("ldl", "竹蜻蜓没有配置了广告");
+                }
+
+
+                config.market = market;
+                loadData();
+            }
+        });
+    }
+
+    public void loadData() {
+        Log.d("ldl", "加载数据...");
+        if (this.config != null) {
+            this.toLoadData(this.config.market);
+        } else {
+            this.showError();
         }
 
     }
 
-    @Override
-    public void loadData() {
-        showLoading();
-        MoreListLogic.getAppList(getActivity(), null, SConstant.CID_APP_LIST, new StringCallback() {
-            @Override
+    private void toLoadData(String market) {
+        this.showLoading();
+        MoreListLogic.getAppList(this.getActivity(), null, SConstant.CID_APP_LIST, market, new StringCallback() {
             public void onSuccess(Response<String> response) {
-                if (handleData(response.body())) {
-                    showView();
+                if (MoreListFragment.this.handleData(response.body())) {
+                    MoreListFragment.this.showView();
                 } else {
-                    showError();
+                    MoreListFragment.this.showError();
                 }
+
             }
 
-            @Override
             public void onError(Response<String> response) {
                 super.onError(response);
-                showError();
+                MoreListFragment.this.showError();
             }
-        }, mModeReq);
+        }, this.mModeReq);
     }
 
-    private OnMovieListScrollListener mListener;
-
-    public interface OnMovieListScrollListener {
-        void onMovieListScrolled(int distance, int offset);
-    }
-
-    public void addOnMovieListScrollListener(OnMovieListScrollListener mlistener) {
+    public void addOnMovieListScrollListener(MoreListFragment.OnMovieListScrollListener mlistener) {
         this.mListener = mlistener;
     }
 
-    private int mDistanceY = 0;
-
-    @Override
     public void showView() {
-        progressBar.setVisibility(View.GONE);
-        refreshLayout.setVisibility(View.VISIBLE);
-        errorView.setVisibility(View.GONE);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(getActivity()));
-        mRecyclerView.setAdapter(moreAdapter = new MoreAdapter(listInfo, getActivity(), mModeReq));
-        mRecyclerView.addOnScrollListener(new RecyclerView.OnScrollListener() {
-            @Override
+        this.progressBar.setVisibility(View.GONE);
+        this.refreshLayout.setVisibility(View.VISIBLE);
+        this.errorView.setVisibility(View.GONE);
+        this.mRecyclerView.setLayoutManager(new LinearLayoutManager(this.getActivity()));
+        this.mRecyclerView.setAdapter(this.moreAdapter = new MoreAdapter(this.listInfo, this.getActivity(), this.mModeReq));
+        this.mRecyclerView.addOnScrollListener(new OnScrollListener() {
             public void onScrollStateChanged(RecyclerView view, int state) {
-                RecyclerView.LayoutManager layoutManager = view.getLayoutManager();
+                LayoutManager layoutManager = view.getLayoutManager();
                 int visibleItemCount = layoutManager.getChildCount();
                 int totalItemCount = layoutManager.getItemCount();
-
-
                 int lastVisibleItem = ((LinearLayoutManager) view.getLayoutManager()).findLastVisibleItemPosition();
-                if (!mLoading && visibleItemCount > 0 && state == SCROLL_STATE_IDLE && lastVisibleItem >= totalItemCount - 1) {
-                    mLoading = true;
-                    MoreListLogic.getAppList(getActivity(), listInfo.href_next, SConstant.CID_APP_LIST, new StringCallback() {
-                        @Override
-                        public void onSuccess(Response<String> response) {
-                            if (handleData(response.body())) {
-                                moreAdapter.addData(listInfo.list);
-                            } else {
-                                Toast.makeText(getActivity(), R.string.not_more_data, Toast.LENGTH_SHORT).show();
-                            }
-                            mLoading = false;
-                        }
+                if (!MoreListFragment.this.mLoading && visibleItemCount > 0 && state == 0 && lastVisibleItem >= totalItemCount - 1) {
+                    MoreListFragment.this.mLoading = true;
+                    if (MoreListFragment.this.config != null) {
+                        MoreListLogic.getAppList(MoreListFragment.this.getActivity(), MoreListFragment.this.listInfo.href_next, SConstant.CID_APP_LIST, config.market, new StringCallback() {
+                            public void onSuccess(Response<String> response) {
+                                if (MoreListFragment.this.handleData((String) response.body())) {
+                                    MoreListFragment.this.moreAdapter.addData(MoreListFragment.this.listInfo.list);
+                                } else {
+                                    Toast.makeText(MoreListFragment.this.getActivity(), string.not_more_data, View.VISIBLE).show();
+                                }
 
-                        @Override
-                        public void onError(Response<String> response) {
-                            super.onError(response);
-                            if (null != getActivity() && getActivity().getResources() != null) {
-                                Toast.makeText(getActivity(), R.string.get_data_failed, Toast.LENGTH_SHORT).show();
+                                MoreListFragment.this.mLoading = false;
                             }
 
-                            mLoading = false;
-                        }
-                    }, mModeReq);
+                            public void onError(Response<String> response) {
+                                super.onError(response);
+                                if (null != MoreListFragment.this.getActivity() && MoreListFragment.this.getActivity().getResources() != null) {
+                                    Toast.makeText(MoreListFragment.this.getActivity(), string.get_data_failed, View.VISIBLE).show();
+                                }
+
+                                MoreListFragment.this.mLoading = false;
+                            }
+                        }, MoreListFragment.this.mModeReq);
+                    }
                 }
+
                 view.getChildAt(0);
             }
 
-            @Override
             public void onScrolled(RecyclerView view, int dx, int dy) {
                 int lastVisibleItem = ((LinearLayoutManager) view.getLayoutManager()).findLastVisibleItemPosition();
                 int firstVisibleItem = ((LinearLayoutManager) view.getLayoutManager()).findFirstVisibleItemPosition();
                 int itemNumber = lastVisibleItem - firstVisibleItem;
-//                View topView = view.getChildAt(0);
                 View bottomView = view.getChildAt(itemNumber);
                 int total = view.getHeight();
                 int bottomViewTop = bottomView.getTop();
                 int half = total - bottomViewTop;
-                mDistanceY += dy;
-                if (mListener != null) {
-                    mListener.onMovieListScrolled(mDistanceY, dy);
+                MoreListFragment.this.mDistanceY = MoreListFragment.this.mDistanceY + dy;
+                if (MoreListFragment.this.mListener != null) {
+                    MoreListFragment.this.mListener.onMovieListScrolled(MoreListFragment.this.mDistanceY, dy);
                 }
+
                 if (half >= bottomView.getHeight() / 3) {
-                    //上报最后一个item
-                    reportExposure(firstVisibleItem, lastVisibleItem);
+                    MoreListFragment.this.reportExposure(firstVisibleItem, lastVisibleItem);
                 } else {
-                    reportExposure(firstVisibleItem, lastVisibleItem - 1);
-                    //不上报最后一个item
+                    MoreListFragment.this.reportExposure(firstVisibleItem, lastVisibleItem - 1);
                 }
+
             }
         });
-        refreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
+        this.refreshLayout.setOnRefreshListener(new OnRefreshListener() {
             public void onRefresh() {
-                refresh();
+                MoreListFragment.this.refresh();
             }
         });
         DownloadLogic.getInstance().setDownloadListener(this);
-        initSearch();
     }
 
     private void initSearch() {
-
-        searchHome.setOnClickListener(new View.OnClickListener() {
-            @Override
+        this.searchHome.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
-                startActivity(new Intent(getActivity(), SearchActivity.class));
+                Intent intent = new Intent(MoreListFragment.this.getActivity(), SearchActivity.class);
+                intent.putExtra(SearchActivity.EXTRA_TAG, SearchActivity.download_app);
+                MoreListFragment.this.startActivity(intent);
             }
         });
     }
 
     private void refresh() {
-        MoreListLogic.getAppList(getActivity(), listInfo.href_next, SConstant.CID_APP_LIST, new StringCallback() {
-            @Override
-            public void onSuccess(Response<String> response) {
-                if (handleData(response.body())) {
-                    moreAdapter.setData(listInfo);
-                } else {
-                    Toast.makeText(getActivity(), R.string.refresh_failed, Toast.LENGTH_SHORT).show();
-                }
-                refreshLayout.setRefreshing(false);
-            }
+        if (this.config != null) {
+            MoreListLogic.getAppList(this.getActivity(), this.listInfo.href_next, SConstant.CID_APP_LIST, this.config.market, new StringCallback() {
+                public void onSuccess(Response<String> response) {
+                    if (handleData(response.body())) {
+                        moreAdapter.setData(MoreListFragment.this.listInfo);
+                    } else {
+                        Toast.makeText(MoreListFragment.this.getActivity(), string.refresh_failed, Toast.LENGTH_SHORT).show();
+                    }
 
-            @Override
-            public void onError(Response<String> response) {
-                super.onError(response);
-                showError();
-                refreshLayout.setRefreshing(false);
-            }
-        }, mModeReq);
+                   refreshLayout.setRefreshing(false);
+                }
+
+                public void onError(Response<String> response) {
+                    super.onError(response);
+                    MoreListFragment.this.showError();
+                    MoreListFragment.this.refreshLayout.setRefreshing(false);
+                }
+            }, this.mModeReq);
+        }
+
     }
 
-    private void handleDownList(String down_list) {
-        if (null != down_list) {
-            Log.e("DOWN_LIST", down_list);
+    private void handleDownList(String downListJson) {
+        if (null != downListJson) {
+            Log.e("DOWN_LIST", downListJson);
+
             try {
-                final StoreListInfo downAction = new Gson().fromJson(down_list, StoreListInfo.class);
+                final StoreListInfo downAction = (StoreListInfo) (new Gson()).fromJson(downListJson, StoreListInfo.class);
                 if (null != downAction && downAction.list != null) {
                     EXECUTOR.execute(new Runnable() {
-                        @Override
                         public void run() {
-                            for (StoreApkInfo apkInfo : downAction.list) {
-                                DownloadLogic.getInstance().startDownload(Application.getContext(), apkInfo.href_download, apkInfo.appname,
-                                        apkInfo.appid, apkInfo.icon, apkInfo.apk, apkInfo.versioncode, apkInfo.rpt_dc, apkInfo.rpt_dl, downAction.rtp_method);
-                                PublicDao.insert(buildDmBean(apkInfo, downAction.rtp_method));
+                            Iterator var1 = downAction.list.iterator();
+
+                            while (var1.hasNext()) {
+                                StoreApkInfo apkInfo = (StoreApkInfo) var1.next();
+                                DownloadLogic.getInstance().startDownload(Application.getContext(), apkInfo.href_download, apkInfo.appname, apkInfo.appid, apkInfo.icon, apkInfo.apk, apkInfo.versioncode, apkInfo.rpt_dc, apkInfo.rpt_dl, downAction.rtp_method);
+                                PublicDao.insert(MoreListFragment.this.buildDmBean(apkInfo, downAction.rtp_method));
                             }
-                            startActivity(new Intent(getActivity(), DMActivity.class));
+
+                            MoreListFragment.this.startActivity(new Intent(MoreListFragment.this.getActivity(), DMActivity.class));
                         }
                     });
                 } else {
-                    Toast.makeText(getActivity(), "数据解析错误", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this.getActivity(), "数据解析错误", Toast.LENGTH_SHORT).show();
                 }
-            } catch (Exception e) {
-                Toast.makeText(getActivity(), "数据解析错误", Toast.LENGTH_SHORT).show();
+            } catch (Exception var3) {
+                Toast.makeText(this.getActivity(), "数据解析错误", Toast.LENGTH_SHORT).show();
             }
         }
+
     }
 
     private void reportExposure(int first, int last) {
-        for (int i = first; i <= last; i++) {
-            StoreApkInfo info = MoreAdapter.appList.get(i); //此处不需要-1
-            if (!exposureId.containsKey(info.appid)) {
-                ReportLogic.report(getActivity(), listInfo.rtp_method, info.rpt_ss, listInfo.flag_replace, null);
-                exposureId.put(info.appid, info.rpt_ss);
+        for (int i = first; i <= last; ++i) {
+            StoreApkInfo info = (StoreApkInfo) MoreAdapter.appList.get(i);
+            if (!this.exposureId.containsKey(info.appid)) {
+                ReportLogic.report(this.getActivity(), this.listInfo.rtp_method, info.rpt_ss, this.listInfo.flag_replace, (ClickInfo) null);
+                this.exposureId.put(info.appid, info.rpt_ss);
             }
         }
+
     }
 
     public void showLoading() {
-        refreshLayout.setVisibility(View.GONE);
-        errorView.setVisibility(View.GONE);
-        progressBar.setVisibility(View.VISIBLE);
+        this.refreshLayout.setVisibility(View.GONE);
+        this.errorView.setVisibility(View.GONE);
+        this.progressBar.setVisibility(View.VISIBLE);
     }
 
     private DmBean buildDmBean(StoreApkInfo info, String rtp_method) {
@@ -326,43 +351,43 @@ public class MoreListFragment extends BaseFragment implements DownloadLogic.Down
         return dmBean;
     }
 
-    @Override
     public void showError() {
-        progressBar.setVisibility(View.GONE);
-        refreshLayout.setVisibility(View.GONE);
-        errorView.setVisibility(View.VISIBLE);
-        reload.setOnClickListener(new View.OnClickListener() {
-            @Override
+        this.progressBar.setVisibility(View.GONE);
+        this.refreshLayout.setVisibility(View.GONE);
+        this.errorView.setVisibility(View.VISIBLE);
+        this.reload.setOnClickListener(new OnClickListener() {
             public void onClick(View view) {
-                loadData();
+                MoreListFragment.this.loadData();
             }
         });
     }
 
     private boolean handleData(String body) {
-        listInfo = new Gson().fromJson(body, StoreListInfo.class);
-        return null != listInfo && null == listInfo.err && listInfo.list.size() > 0;
+        this.listInfo = (StoreListInfo) (new Gson()).fromJson(body, StoreListInfo.class);
+        return null != this.listInfo && null == this.listInfo.err && this.listInfo.list.size() > 0;
     }
 
-    @Override
     public void onProgressListener(String appId) {
-
     }
 
-    @Override
     public void onError(String appId) {
-        if (null != moreAdapter)
-            moreAdapter.notifyDataSetChanged();
+        if (null != this.moreAdapter) {
+            this.moreAdapter.notifyDataSetChanged();
+        }
+
     }
 
-    @Override
     public void onStart(String appId) {
+    }
+
+    public void onSuccess(String appId) {
+        if (null != this.moreAdapter) {
+            this.moreAdapter.notifyDataSetChanged();
+        }
 
     }
 
-    @Override
-    public void onSuccess(String appId) {
-        if (null != moreAdapter)
-            moreAdapter.notifyDataSetChanged();
+    public interface OnMovieListScrollListener {
+        void onMovieListScrolled(int var1, int var2);
     }
 }

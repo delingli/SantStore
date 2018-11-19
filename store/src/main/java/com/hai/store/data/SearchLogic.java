@@ -1,4 +1,12 @@
+//
+// Source code recreated from a .class file by IntelliJ IDEA
+// (powered by Fernflower decompiler)
+//
+
 package com.hai.store.data;
+
+import android.text.TextUtils;
+import android.util.Log;
 
 import com.hai.store.Application;
 import com.hai.store.base.SConstant;
@@ -7,44 +15,61 @@ import com.lzy.okgo.OkGo;
 import com.lzy.okgo.callback.StringCallback;
 import com.lzy.okgo.request.PostRequest;
 
+import java.util.Iterator;
 import java.util.Map;
 
 public class SearchLogic {
-
     private static final String TAG = "SearchLogic";
     private static final String SEARCH_TAG = "search";
     private static final String RECOMMEDN_TAG = "recommend_search";
 
-    public static void getSearchContent(String search, StringCallback callback) {
-        String url = SConstant.MARKET + SConstant.TYPE + SConstant.TYPE_SEARCH + SConstant.SEARCH + search;
-        request(url, SEARCH_TAG, callback);
+    public SearchLogic() {
     }
 
-    public static void getHotSearch(StringCallback callback) {
-        String url = SConstant.MARKET + SConstant.TYPE + SConstant.TYPE_LIST + SConstant.CID + "-11";
+    public static void getSearchContent(String market, String search, StringCallback callback) {
+        String url;
+        if (TextUtils.isEmpty(market)) {
+            url = SConstant.MARKET+SConstant.TYPE+SConstant.TYPE_SEARCH+SConstant.SEARCH +search+ SConstant.CID + SConstant.CID_FOUND.CID_APP_SEARCHRESULT;
+            Log.d("ldl", "market为null直接不传");
+        } else {
+            url =  SConstant.MARKET+SConstant.TYPE+SConstant.TYPE_SEARCH+SConstant.SEARCH + search + SConstant.CID + SConstant.CID_FOUND.CID_APP_SEARCHRESULT + "&market=" + market;
+        }
+        request(url, "search", callback);
+    }
+
+    public static void getHotSearch(String market, StringCallback callback) {
+        String url;
+        if(TextUtils.isEmpty(market)){
+            url=SConstant.MARKET+SConstant.TYPE+SConstant.TYPE_LIST+SConstant.CID+"-30";
+        }else{
+            url=SConstant.MARKET+SConstant.TYPE+SConstant.TYPE_LIST+SConstant.CID+"-30"+SConstant.APP_MARKET+market;
+        }
         request(url, "hot", callback);
     }
 
     public static void getRecommend(StringCallback callback) {
-        String url = SConstant.MARKET + SConstant.TYPE + SConstant.TYPE_LIST + SConstant.CID + "-13" + SConstant.PAGE_SIZE + 5;
-        request(url, RECOMMEDN_TAG, callback);
+        String url=SConstant.MARKET+SConstant.TYPE+SConstant.TYPE_LIST+SConstant.CID+"-30"+SConstant.PAGE_SIZE+"5";
+        request(url, "recommend_search", callback);
     }
 
     public static void stopSearch() {
-        OkGo.getInstance().cancelTag(SEARCH_TAG);
+        OkGo.getInstance().cancelTag("search");
     }
 
     public static void stopRecommend() {
-        OkGo.getInstance().cancelTag(RECOMMEDN_TAG);
+        OkGo.getInstance().cancelTag("recommend_search");
     }
 
     private static void request(String url, String tag, StringCallback callback) {
         Map<String, String> deviceInfo = Device.getDeviceInfo(Application.getContext());
-        PostRequest<String> request = OkGo.<String>post(url)
-                .tag(tag);
-        for (String key : deviceInfo.keySet()) {
-            request.params(key, deviceInfo.get(key));
+        PostRequest<String> request = (PostRequest) OkGo.post(url).tag(tag);
+        Iterator var5 = deviceInfo.keySet().iterator();
+
+        while (var5.hasNext()) {
+            String key = (String) var5.next();
+            request.params(key, (String) deviceInfo.get(key), new boolean[0]);
         }
+
         request.execute(callback);
     }
 }
