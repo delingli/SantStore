@@ -14,6 +14,7 @@ import android.support.v4.app.DialogFragment;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.RecyclerView.ItemAnimator;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +27,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 import android.widget.CompoundButton.OnCheckedChangeListener;
+
 import com.hai.store.Application;
 import com.hai.store.R.drawable;
 import com.hai.store.R.id;
@@ -39,6 +41,7 @@ import com.hai.store.data.DownloadLogic;
 import com.hai.store.data.ReportLogic;
 import com.hai.store.utils.Device;
 import com.squareup.picasso.Picasso;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Iterator;
@@ -110,7 +113,7 @@ public class SplashRecommend extends DialogFragment {
         if (null == this.mAdapter) {
             this.mContent.setLayoutManager(new GridLayoutManager(this.getActivity(), 3));
             this.mContent.setAdapter(this.mAdapter = new Adapter(getActivity(), mStoreListInfo));
-            this.mContent.setItemAnimator((ItemAnimator)null);
+            this.mContent.setItemAnimator((ItemAnimator) null);
             this.mInstall.setOnClickListener(new OnClickListener() {
                 public void onClick(View v) {
                     List<StoreApkInfo> checkApp = SplashRecommend.this.mAdapter.getCheckApp();
@@ -150,8 +153,8 @@ public class SplashRecommend extends DialogFragment {
         List<DmBean> list = new ArrayList();
         Iterator var3 = apkInfos.iterator();
 
-        while(var3.hasNext()) {
-            StoreApkInfo apkInfo = (StoreApkInfo)var3.next();
+        while (var3.hasNext()) {
+            StoreApkInfo apkInfo = (StoreApkInfo) var3.next();
             list.add(this.buildDMBean(apkInfo));
         }
 
@@ -160,15 +163,15 @@ public class SplashRecommend extends DialogFragment {
 
     private DmBean buildDMBean(StoreApkInfo apkInfo) {
         DmBean dmBean = new DmBean(apkInfo.appid, apkInfo.appname, apkInfo.apk, apkInfo.versioncode, apkInfo.versionname, apkInfo.size, apkInfo.icon, apkInfo.href_download, apkInfo.rpt_dc, apkInfo.rpt_ic, apkInfo.rpt_ac, apkInfo.rpt_dl, this.mStoreListInfo.rtp_method);
-        ReportLogic.report(Application.getContext(), this.mStoreListInfo.rtp_method, apkInfo.rpt_cd, this.mStoreListInfo.flag_replace, (ClickInfo)null);
+        ReportLogic.report(Application.getContext(), this.mStoreListInfo.rtp_method, apkInfo.rpt_cd, this.mStoreListInfo.flag_replace, (ClickInfo) null);
         return dmBean;
     }
 
     private void findView(View view) {
-        this.mInstall = (TextView)view.findViewById(id.splash_install);
-        this.mCancel = (TextView)view.findViewById(id.splash_un_all_check);
-        this.mChange = (TextView)view.findViewById(id.splash_change);
-        ImageView mClose = (ImageView)view.findViewById(id.splash_close);
+        this.mInstall = (TextView) view.findViewById(id.splash_install);
+        this.mCancel = (TextView) view.findViewById(id.splash_un_all_check);
+        this.mChange = (TextView) view.findViewById(id.splash_change);
+        ImageView mClose = (ImageView) view.findViewById(id.splash_close);
         mClose.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
                 SplashRecommend.this.dismiss();
@@ -178,7 +181,7 @@ public class SplashRecommend extends DialogFragment {
 
             }
         });
-        this.mContent = (RecyclerView)view.findViewById(id.splash_recycle);
+        this.mContent = (RecyclerView) view.findViewById(id.splash_recycle);
     }
 
     private static class Adapter extends android.support.v7.widget.RecyclerView.Adapter<OneAppHolder> {
@@ -197,7 +200,7 @@ public class SplashRecommend extends DialogFragment {
             this.mListInfo = listInfo;
             this.mInfoList = listInfo.list;
 
-            for(int i = 0; i < this.mInfoList.size(); ++i) {
+            for (int i = 0; i < this.mInfoList.size(); ++i) {
                 this.checkPosition.put(i, true);
             }
 
@@ -206,7 +209,7 @@ public class SplashRecommend extends DialogFragment {
         private List<StoreApkInfo> getCheckApp() {
             List<StoreApkInfo> checkList = new ArrayList();
 
-            for(int i = 0; i < this.mInfoList.size() && i < 9; ++i) {
+            for (int i = 0; i < this.mInfoList.size() && i < 9; ++i) {
                 if (this.checkPosition.get(i)) {
                     checkList.add(this.mInfoList.get(i));
                 }
@@ -219,7 +222,7 @@ public class SplashRecommend extends DialogFragment {
             this.checkPosition.clear();
             this.mInfoList = infoList;
 
-            for(int i = 0; i < this.mInfoList.size(); ++i) {
+            for (int i = 0; i < this.mInfoList.size(); ++i) {
                 this.checkPosition.put(i, true);
             }
 
@@ -227,7 +230,7 @@ public class SplashRecommend extends DialogFragment {
         }
 
         private void unCheckAll() {
-            for(int i = 0; i < this.checkPosition.size(); ++i) {
+            for (int i = 0; i < this.checkPosition.size(); ++i) {
                 this.checkPosition.put(i, false);
             }
 
@@ -239,7 +242,7 @@ public class SplashRecommend extends DialogFragment {
         }
 
         public void onBindViewHolder(final OneAppHolder holder, int position) {
-            StoreApkInfo apkInfo = (StoreApkInfo)this.mInfoList.get(position);
+            StoreApkInfo apkInfo = (StoreApkInfo) this.mInfoList.get(position);
             holder.appCheck.setChecked(this.checkPosition.get(position));
             holder.appCheck.setOnCheckedChangeListener(new OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -250,7 +253,7 @@ public class SplashRecommend extends DialogFragment {
             Picasso.with(this.mContext).load(apkInfo.icon).placeholder(drawable.ic_loading).error(drawable.ic_loading).into(holder.appIcon);
             if (!this.showReport.contains(apkInfo.appid)) {
                 this.showReport.add(apkInfo.appid);
-                ReportLogic.report(Application.getContext(), this.mListInfo.rtp_method, apkInfo.rpt_ss, this.mListInfo.flag_replace, (ClickInfo)null);
+                ReportLogic.report(Application.getContext(), this.mListInfo.rtp_method, apkInfo.rpt_ss, this.mListInfo.flag_replace, (ClickInfo) null);
             }
 
         }
