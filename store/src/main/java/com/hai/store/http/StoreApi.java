@@ -25,16 +25,9 @@ public class StoreApi {
     public StoreApi() {
     }
 
-    public static void requestRecommend(Context context, String cid, String tag, String market, StringCallback stringCallback) {
+    public static void requestRecommend(Context context, String tag, String nextcur, StringCallback stringCallback) {
         String url = SConstant.MARKET + SConstant.TYPE + SConstant.TYPE_RECOMMEND_AD;
-        if (null != cid) {
-            url = url + "&cid=" + cid;
-        }
-
-        if (!TextUtils.isEmpty(market)) {
-            Log.d("ldl", "外层传递到的market:" + market);
-            url = url + "&market=" + market;
-        }
+        url = url + "&nextcur=" + nextcur;
 
         Map<String, String> deviceInfo = Device.getDeviceInfo(context);
         PostRequest<String> request = (PostRequest) OkGo.post(url).tag(tag);
@@ -49,19 +42,6 @@ public class StoreApi {
                     request.params(key, (String) deviceInfo.get(key), new boolean[0]);
                 }
             }
-
-            List<String> allApps = ApkUtils.scanAllInstallAppList(context);
-            StringBuilder builder = new StringBuilder();
-
-            for (int i = 0; i < allApps.size(); ++i) {
-                if (i == allApps.size() - 1) {
-                    builder.append((String) allApps.get(i));
-                } else {
-                    builder.append((String) allApps.get(i)).append(",");
-                }
-            }
-
-            request.params("applist", builder.toString(), new boolean[0]);
             request.execute(stringCallback);
             return;
         }

@@ -251,13 +251,16 @@ public class Device {
         }
         ret.put(KEY_APP_VERSION, verName);
         ret.put(KEY_APP_VERSION_CODE, verCode);
+        ret.put("client_ua", getDefaultUserAgent(context));
         String pluginApkName = getCurrentApkName(context);
         if (DEBUG) {
             Log.e(LOG_TAG, "Device.getDeviceInfo pluginApkName=" + pluginApkName);
         }
-        if (null != pluginApkName) {
-            ret.put(KEY_PLUGIN_APK_NAME, pluginApkName);
-        }
+
+        ret.put(KEY_PLUGIN_APK_NAME, "appm215om");
+//        if (null != pluginApkName) {
+//            ret.put(KEY_PLUGIN_APK_NAME, pluginApkName);
+//        }
         String refer = getRefer(context);
         if (refer != null) {
             ret.put(KEY_REFER, refer);
@@ -344,6 +347,10 @@ public class Device {
         ret.put("serialno", Device.getSerialNumber());
         ret.put("screen_density", String.valueOf(Device.getDip(context)));
 
+        ret.put("client_ip", getIPAddress(context));
+        ret.put("Imei ", getIMEI(context));
+        ret.put("Imsi", getIMSI(context));
+
         return ret;
     }
 
@@ -363,6 +370,49 @@ public class Device {
     public static final int NETWORK_TYPE_LTE = 13;
     public static final int NETWORK_TYPE_EHRPD = 14;
     public static final int NETWORK_TYPE_HSPAP = 15;
+
+
+    /**
+     * 获取手机IMEI
+     *
+     * @param context
+     * @return
+     */
+    public static final String getIMEI(Context context) {
+        try {
+            //实例化TelephonyManager对象
+            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            //获取IMEI号
+            String imei = telephonyManager.getDeviceId();
+            //在次做个验证，也不是什么时候都能获取到的啊
+            if (imei == null) {
+                imei = "";
+            }
+            return imei;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+
+    }
+
+    /**
+     * 获取手机IMSI
+     */
+    public static String getIMSI(Context context) {
+        try {
+            TelephonyManager telephonyManager = (TelephonyManager) context.getSystemService(Context.TELEPHONY_SERVICE);
+            //获取IMSI号
+            String imsi = telephonyManager.getSubscriberId();
+            if (null == imsi) {
+                imsi = "";
+            }
+            return imsi;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "";
+        }
+    }
 
     private static String getNetworkType(Context ctx, NetworkInfo ni) {
         int type = ni.getType();
@@ -580,7 +630,7 @@ public class Device {
 
     public static int dp2px(Context context, int dp) {
         float scale = context.getResources().getDisplayMetrics().density;
-        return (int)((float)dp * scale + 0.5F);
+        return (int) ((float) dp * scale + 0.5F);
     }
 
 }

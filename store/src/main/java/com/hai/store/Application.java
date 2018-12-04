@@ -1,7 +1,10 @@
 package com.hai.store;
 
 import android.content.Context;
+import android.content.Intent;
+import android.content.IntentFilter;
 
+import com.hai.store.broadcast.ApkReceiver;
 import com.hai.store.data.DownloadCart;
 import com.hai.store.keepalive.GrayService;
 import com.hai.store.keepalive.api.Api;
@@ -34,6 +37,7 @@ public class Application extends android.app.Application {
 
     public static void init(final android.app.Application context, boolean keepAlive) {
         mContext = context;
+        initBrodcastReceiver(context);
         ImageLoader.getInstance().init(ImageLoaderConfiguration.createDefault(context));
         OkHttpClient.Builder builder = new OkHttpClient.Builder();
         builder.readTimeout(OkGo.DEFAULT_MILLISECONDS, TimeUnit.MILLISECONDS);
@@ -64,5 +68,17 @@ public class Application extends android.app.Application {
             }
         }).start();
         if (keepAlive) GrayService.start(context);
+
+
+    }
+
+    private static void initBrodcastReceiver(Context context) {
+        ApkReceiver apkreceiver = new ApkReceiver();
+        IntentFilter intentFilter = new IntentFilter();
+        intentFilter.addAction(Intent.ACTION_PACKAGE_ADDED);
+        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        intentFilter.addAction(Intent.ACTION_PACKAGE_REMOVED);
+        intentFilter.addDataScheme("package");
+        context.registerReceiver(apkreceiver, intentFilter);
     }
 }

@@ -7,6 +7,7 @@ package com.hai.store.view;
 
 import android.app.Dialog;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -32,6 +33,7 @@ import com.hai.store.Application;
 import com.hai.store.R.drawable;
 import com.hai.store.R.id;
 import com.hai.store.R.layout;
+import com.hai.store.activity.DetailActivity;
 import com.hai.store.adapter.OneAppHolder;
 import com.hai.store.bean.ClickInfo;
 import com.hai.store.bean.DmBean;
@@ -47,6 +49,11 @@ import java.util.HashSet;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Set;
+
+import static com.hai.store.base.SConstant.APP_NAME;
+import static com.hai.store.base.SConstant.DETAIL_ELSE;
+import static com.hai.store.base.SConstant.PKG_NAME;
+import static com.hai.store.base.SConstant.TMODE_WIFI;
 
 public class SplashRecommend extends DialogFragment {
     private static final String TAG = "SplashRecommend";
@@ -174,6 +181,7 @@ public class SplashRecommend extends DialogFragment {
         ImageView mClose = (ImageView) view.findViewById(id.splash_close);
         mClose.setOnClickListener(new OnClickListener() {
             public void onClick(View v) {
+                Log.d("ldl","测试测试???");
                 SplashRecommend.this.dismiss();
                 if (null != SplashRecommend.this.mLoadListener) {
                     SplashRecommend.this.mLoadListener.onExit();
@@ -184,7 +192,7 @@ public class SplashRecommend extends DialogFragment {
         this.mContent = (RecyclerView) view.findViewById(id.splash_recycle);
     }
 
-    private static class Adapter extends android.support.v7.widget.RecyclerView.Adapter<OneAppHolder> {
+    private class Adapter extends android.support.v7.widget.RecyclerView.Adapter<OneAppHolder> {
         private Context mContext;
         private StoreListInfo mListInfo;
         private List<StoreApkInfo> mInfoList;
@@ -242,7 +250,7 @@ public class SplashRecommend extends DialogFragment {
         }
 
         public void onBindViewHolder(final OneAppHolder holder, int position) {
-            StoreApkInfo apkInfo = (StoreApkInfo) this.mInfoList.get(position);
+            final StoreApkInfo apkInfo = (StoreApkInfo) this.mInfoList.get(position);
             holder.appCheck.setChecked(this.checkPosition.get(position));
             holder.appCheck.setOnCheckedChangeListener(new OnCheckedChangeListener() {
                 public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -255,11 +263,24 @@ public class SplashRecommend extends DialogFragment {
                 this.showReport.add(apkInfo.appid);
                 ReportLogic.report(Application.getContext(), this.mListInfo.rtp_method, apkInfo.rpt_ss, this.mListInfo.flag_replace, (ClickInfo) null);
             }
+            holder.itemView.setOnClickListener(new OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //todo detailsActivity
+                    Intent intent = new Intent(SplashRecommend.this.getContext(), DetailActivity.class);
+                    Bundle bundle = new Bundle();
+                    bundle.putString(PKG_NAME, apkInfo.apk);
+                    bundle.putString(APP_NAME, apkInfo.appname);
+                    intent.putExtra(DetailActivity.DETAIL, bundle);
+                    SplashRecommend.this.getContext().startActivity(intent);
+                    dismiss();
+                }
+            });
 
         }
 
         public int getItemCount() {
-            return null == this.mInfoList ? 0 : (this.mInfoList.size() > 9 ? 9 : this.mInfoList.size());
+            return null == this.mInfoList ? 0 : (this.mInfoList.size() > 9? 9 : this.mInfoList.size());
         }
     }
 }

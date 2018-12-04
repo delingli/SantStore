@@ -24,6 +24,10 @@ public class StoreApkInfo implements Parcelable{
     public ArrayList<String> rpt_ac;    //激活
     public String rpt_dl;    //删除
 
+    public StoreApkInfo() {
+    }
+
+
     protected StoreApkInfo(Parcel in) {
         appid = in.readString();
         icon = in.readString();

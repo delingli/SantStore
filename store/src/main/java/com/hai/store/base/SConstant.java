@@ -18,11 +18,11 @@ public interface SConstant {
     String FROM = "test";
     String QI_HOO = "qihoo";
     String SEARCH_WORD = "同城旅游";
-    String MARKET = "http://adapi.yiticm.com:7701/market.php";
+    String MARKET = "http://adapi.yiticm.com:7702/market/onemob.php";
     String TYPE = "?type=";
     String TYPE_CATEGORY = "category";
     String TYPE_LIST = "list";
-    String TYPE_RECOMMEND_AD = "recommendad";
+    String TYPE_RECOMMEND_AD = "list1";
     String TYPE_WIFI = "wifi";
     String TYPE_SEARCH = "search";
     String APP_LIST = "applist";

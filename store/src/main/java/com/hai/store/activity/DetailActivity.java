@@ -124,14 +124,17 @@ public class DetailActivity extends BaseActivity implements DownloadLogic.Downlo
 
     @Override
     public void setLogic() {
-        setSupportActionBar(toolbar);
-        toolbar.setNavigationIcon(R.drawable.app_back_selector);
-        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                onBackPressed();
-            }
-        });
+        if(getActionBar()==null){
+            setSupportActionBar(toolbar);
+            toolbar.setNavigationIcon(R.drawable.app_back_selector);
+            toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    onBackPressed();
+                }
+            });
+        }
+
         reload.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -150,8 +153,8 @@ public class DetailActivity extends BaseActivity implements DownloadLogic.Downlo
         } else {
             Bundle bundle = intent.getBundleExtra(DETAIL);
             if (null != bundle) {
-                detailUrl = bundle.getString(PKG_NAME) + TMODE + bundle.getString(DETAIL_ELSE);
-                appName = bundle.getString(APP_NAME);
+                detailUrl = SConstant.MARKET + SConstant.TYPE + "details" + "&apk=" + bundle.getString(PKG_NAME);
+                appName = "";
                 setTitle();
             }
         }
