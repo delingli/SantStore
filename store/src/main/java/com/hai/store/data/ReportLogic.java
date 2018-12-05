@@ -61,7 +61,7 @@ public class ReportLogic {
      */
     public static void report(Context context, String rtp_method, List<String> urlList, int replace, ClickInfo info) {
         if (null != urlList) {
-            if ("GET".equals(rtp_method)) {
+
                 for (String url : urlList) {
                     Log.d("ReportLogic", "GET url : " + url);
                     OkGo.<String>get(url)
@@ -79,8 +79,8 @@ public class ReportLogic {
                                 }
                             });
                 }
-            }
-            if ("POST".equals(rtp_method)) {
+
+      /*      if ("POST".equals(rtp_method)) {
                 if (info != null) {
                     Log.d(TAG, "我要开始上报的点击坐标x:" + info.x + "y:" + info.y);
                 }
@@ -98,7 +98,7 @@ public class ReportLogic {
                     }
 
                 }
-            }
+            }*/
         }
     }
 
